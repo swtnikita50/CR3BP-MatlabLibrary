@@ -1,0 +1,87 @@
+%{
+...
+Created on  02/07/22 22:10 - Nikita
+
+This File does the continuation and gets all the Halo orbit parameters.
+
+Inputs
+------
+1) UserDat - Supplied UserData in main file.
+2) G_var   - Global data.
+3) e       - specified jacobianContant
+
+Outputs
+--------
+1) HaloOrb - A structure containing 
+                - time      - full time period for Halo orbit.
+                - IC        - Initial Conditions for Halo Orbit.
+                - Energy    - Energy Value for Halo Orbit.
+                - Monodromy - Monodromy matrix of Halo Orbit.
+                - Eigens    - Eigen Values and Eigen Vectors for Halo Orbit.
+                                    - Stable,Unstable and Center Eigen Values
+                                    - Stable,Unstable and Center Eigen Vectors
+
+Note that the size of eigen values and eigen vectors might change
+
+Dependencies
+------------
+1) InitialGuess(PointLoc,G_var)
+2) DiffCorrec(X_Guess,Plot,G_var, isMaxIterReached)
+                        
+
+Reference for continuation 
+--------------------------
+1) Wang Sang Koon, Martin W Lo,JE Marsden, Shane D Ross - "Dynamical
+   Systems,the Three Body Problem and Space Mission Design", 2011
+...
+%}
+function [HaloOrb] = HaloOrbitParameters(UserDat,G_var)
+% Extract the parameters
+CorrecPlot = UserDat.CorrectionPlot;
+EqPoint = UserDat.PointLoc;
+mu = G_var.Constants.mu;
+funVarEq = G_var.IntFunc.VarEqAndSTMdot;
+
+[XGuessL] = InitialGuess(EqPoint,G_var, 'halo', 1);
+
+switch EqPoint
+    case 1
+        eMax = G_var.LagPts.Energy.L1;
+    case 2
+        eMax = G_var.LagPts.Energy.L2;
+    case 3
+        eMax = G_var.LagPts.Energy.L3;
+end
+
+%isOrbitFound = 1;
+
+% if e > eMax
+%     fprintf(']\n===============================================\n')
+%     fprintf(['Error: The jacobian(energy) value enetered is more \n' ...
+%         'than the maximum limit for the Libration Point\n'])
+%     fprintf('===============================================\n');
+%     isOrbitFound = 0;
+% else
+%end
+
+for guess = 1:2
+    fprintf('\n===============================================\n')
+    fprintf('Obtaining the Corrected Values for guess:- %d\n',guess)
+    fprintf('===============================================\n')
+    [tCorrec(guess,1),xCorrec(guess,:),~] = DiffCorrec(XGuessL(guess,:),CorrecPlot,G_var,'halo');
+    Energy(guess,1) = jacobiValue3D(xCorrec(guess,:),mu);
+
+%     [~,Monodromy(guess,:,:),~,~] = StateTransAndX(G_var,xCorrec(guess,:),funVarEq,tCorrec(guess,:));
+%     [Eigens(guess,:).S_EigVal,Eigens(guess,:).US_EigVal,Eigens(guess,:).C_Val,Eigens(guess,:).S_EigVec,...
+%         Eigens(guess,:).US_EigVec,Eigens(guess,:).C_EigVec] = CalcEigenValVec(Monodromy(guess,:,:),1) ;
+
+
+end
+
+
+HaloOrb.time      = tCorrec; %(NoofFam x 1) - Full Orbit Time
+HaloOrb.IC        = xCorrec; %(NoofFam x UserDat.Dimension)
+HaloOrb.Energy    = Energy;
+% HaloOrb.Monodromy = Monodromy;
+% HaloOrb.Eigens    = Eigens;
+end

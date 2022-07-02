@@ -28,7 +28,7 @@ Note that the size of eigen values and eigen vectors might change
 Dependencies
 ------------
 1) InitialGuess(PointLoc,G_var)
-2) DiffCorrec(X_Guess,Plot,G_var, isMaxIterReached)
+2) DiffCorrec(X_Guess,Plot,G_var)
                         
 
 Reference for continuation 

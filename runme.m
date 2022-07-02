@@ -1,7 +1,7 @@
 %{ 
 ...
 Modified and Updated on 7 Aug 2019 -Karthi
-Modified on 30/6/2022 to generate a full cr3bp library
+Modified on 30/6/2022 to generate a full cr3bp library- Nikita
 (last updated : (1) 21:26, 10/8/2019  (2) 16:06 13/08/2019)  
 (3) Including Manifolds 14/08/2019 - 15/08/2019 (4) Eigen Value Plot and
 others 20/08/2019
@@ -108,9 +108,10 @@ UserDat.CorrectionPlot = 1;%input('Do You want to see correction plot of differe
 tic
 
 G_var                  = GlobalData(UserDat);
-fprintf('mu value %f\n',G_var.Constants.mu)
+fprintf('mu value %f\n',G_var.Constants.mu);
+[HaloOrb]              = HaloOrbitParameters(UserDat,G_var);
 
-[LyapOrb]              = LyapOrbitParameters(UserDat,G_var, 3.1882);
+%[LyapOrb]              = LyapOrbitParameters(UserDat,G_var, 3.1882);
 
 toc
 % takes 21.493200 seconds for earth moon system(for 30- orbits) with i7 - 4 core and 16g Ram ,without
