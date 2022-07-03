@@ -38,6 +38,9 @@ method, refrences are just for convinience, one can follow any source.
 function [tCorrec,xCorrec,DF,isMaxIterReached] = DiffCorrec(X_Guess,Plot,G_var,orbitType)
 % Extract from Global Data
 
+if nargin<4
+    orbitType =
+
 f1 = G_var.IntFunc.EOM;
 f2 = G_var.IntFunc.VarEqAndSTMdot;
 tspan = [0 10];
@@ -46,13 +49,7 @@ isMaxIterReached = 0;
 MaxIteration = 50;
 iteration = 1; % set the iteration value
 
-% if length(X_Guess) < 6
-%     Xfree = X_Guess(4);
-% elseif X_Guess(3)== 0
-%     Xfree = X_Guess(5);
-% else 
-%     Xfree = [X_Guess(3);X_Guess(5)];
-% end
+
 
 switch orbitType
     case 'lyapunov'
@@ -68,7 +65,7 @@ while  norm(Fx)>1.e-10
     
 % Check the max iteration and stop
 if iteration > MaxIteration
-    fprintf('\n Maximum number of iterations exceded: Check for errors in script');
+    fprintf('\nMaximum number of iterations exceded: Check for errors in script. \n');
     isMaxIterReached = 1;
     break;
 end

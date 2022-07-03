@@ -38,6 +38,10 @@ method, refrences are just for convinience, one can follow any source.
 function [tCorrec,xCorrec,DF,isMaxIterReached] = DiffCorrec(X_Guess,Plot,G_var,orbitType)
 % Extract from Global Data
 
+if nargin<4
+    orbitType = 'lyapunov';
+end
+
 f1 = G_var.IntFunc.EOM;
 f2 = G_var.IntFunc.VarEqAndSTMdot;
 tspan = [0 10];
@@ -46,19 +50,13 @@ isMaxIterReached = 0;
 MaxIteration = 50;
 iteration = 1; % set the iteration value
 
-% if length(X_Guess) < 6
-%     Xfree = X_Guess(4);
-% elseif X_Guess(3)== 0
-%     Xfree = X_Guess(5);
-% else 
-%     Xfree = [X_Guess(3);X_Guess(5)];
-% end
+
 
 switch orbitType
     case 'lyapunov'
         Xfree = X_Guess(5);
     case 'halo'
-        Xfree = [X_Guess(3);X_Guess(5)];
+        Xfree = [X_Guess(1);X_Guess(5)];
 end
 del_xDotf = 1;
 del_zDotf = 1;
@@ -68,7 +66,7 @@ while  norm(Fx)>1.e-10
     
 % Check the max iteration and stop
 if iteration > MaxIteration
-    fprintf('\n Maximum number of iterations exceded: Check for errors in script');
+    fprintf('\nMaximum number of iterations exceded: Check for errors in script. \n');
     isMaxIterReached = 1;
     break;
 end
@@ -147,13 +145,14 @@ switch orbitType
         y_Dotf = X_DotDotf(2);
         x_DotDotf = X_DotDotf(4);
         z_DotDotf = X_DotDotf(6);
-        DF = ([PHItf(4,3) PHItf(4,5);PHItf(6,3) PHItf(6,5)] - (1/y_Dotf)*[x_DotDotf;z_DotDotf]*[PHItf(2,3) PHItf(2,5)]);
+        DF = ([PHItf(4,1) PHItf(4,5);PHItf(6,1) PHItf(6,5)] - (1/y_Dotf)*[x_DotDotf;z_DotDotf]*[PHItf(2,1) PHItf(2,5)]);
         
         DFn = -DF\Fx;
+        %DFn(1) = -DFn(1);
         %DFn(2) = DFn(2)/20;
         Xfree = Xfree + DFn;
         % Guess Update
-        X_Guess(3) = Xfree(1);
+        X_Guess(1) = Xfree(1);
         X_Guess(5) = Xfree(2);
 end
 

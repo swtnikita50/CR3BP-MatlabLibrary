@@ -78,7 +78,6 @@ for guess = 1:2
 
 end
 
-
 HaloOrb.time      = tCorrec; %(NoofFam x 1) - Full Orbit Time
 HaloOrb.IC        = xCorrec; %(NoofFam x UserDat.Dimension)
 HaloOrb.Energy    = Energy;
