@@ -41,6 +41,7 @@ CorrecPlot = UserDat.CorrectionPlot;
 EqPoint = UserDat.PointLoc;
 mu = G_var.Constants.mu;
 funVarEq = G_var.IntFunc.VarEqAndSTMdot;
+Eigens = 0;
 
 switch EqPoint
     case 1
@@ -77,9 +78,9 @@ for guess = 1:length(Ax)
     [tCorrec(guess,1),xCorrec(guess,:),~] = DiffCorrec(XGuessL(guess,:),CorrecPlot,G_var,'halo');
     Energy(guess,1) = jacobiValue3D(xCorrec(guess,:),mu);
 
-    [~,Monodromy(:,:,guess),~,~] = StateTransAndX(G_var,xCorrec(guess,:),funVarEq,tCorrec(guess,:));
-    [Eigens(guess).S_EigVal,Eigens(guess).US_EigVal,Eigens(guess).C_Val,Eigens(guess).S_EigVec,...
-        Eigens(guess).US_EigVec,Eigens(guess).C_EigVec] = CalcEigenValVec(Monodromy(:,:,guess),1) ;
+    [~,Monodromy(guess,:,:),~,~] = StateTransAndX(G_var,xCorrec(guess,:),funVarEq,tCorrec(guess,:));
+    [Eigens(guess,:).S_EigVal,Eigens(guess,:).US_EigVal,Eigens(guess,:).C_Val,Eigens(guess,:).S_EigVec,...
+        Eigens(guess,:).US_EigVec,Eigens(guess,:).C_EigVec] = CalcEigenValVec(Monodromy(guess,:,:),1) ;
 
 
 end

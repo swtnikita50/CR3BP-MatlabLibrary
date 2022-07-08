@@ -113,11 +113,12 @@ if Plot == 1
         ax = gca; ax.ColorOrderIndex = iteration;
 
         hold on; grid on
-        plot3(xbnew(:,1),xbnew(:,2),xbnew(:,3))
-        ax = gca; ax.ColorOrderIndex = iteration;
+        %plot3(xbnew(:,1),xbnew(:,2),xbnew(:,3))
+        %ax = gca; ax.ColorOrderIndex = iteration;
         plot3(xb(1,1),xb(1,2),xb(1,3),'*')
         ax = gca; ax.ColorOrderIndex = iteration;
         plot3(xb(end,1),xb(end,2),xb(end,3),'o')
+        plot3(1-G_var.Constants.mu,0,0,'p');
         ax = gca; ax.ColorOrderIndex = iteration;
         axis tight
 end

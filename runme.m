@@ -5,6 +5,7 @@ Modified on 30/6/2022 to generate a full cr3bp library- Nikita
 (last updated : (1) 21:26, 10/8/2019  (2) 16:06 13/08/2019)  
 (3) Including Manifolds 14/08/2019 - 15/08/2019 (4) Eigen Value Plot and
 others 20/08/2019
+4) Halo Orbit: 03/07/22
 
 A fresh Modification to reduce the number of varibles in workspace is started on 20
 Feb,2020
@@ -105,12 +106,49 @@ UserDat.PointLoc       = 1;%input('For how many  equilibrium points do you want 
 % Check if you want to see correction plot(Enter 0 or 1).
 UserDat.CorrectionPlot = 1;%input('Do You want to see correction plot of differential correction?:');
 
+
 tic
 
 G_var                  = GlobalData(UserDat);
 fprintf('mu value %f\n',G_var.Constants.mu);
-[HaloOrb]              = HaloOrbitParameters(UserDat,G_var);
 
+Ax = linspace(0.1025,0.2025,10);
+%Ax = linspace(0.3,0.31,10);
+% Ax = 0.2698;
+%Ax = 0.2683988;
+%Ax = 0.26839889;
+%Ax = 0.27; special case, 0.299, 0.3
+%Ax = [0.2683, 0.2684];
+% Ax = 0.1024 is the minimum value for earth-moon system;
+% works well for halo orbit till Ax = 0.2683
+[HaloOrb]              = HaloOrbitParameters(UserDat,G_var, 'southern',Ax);
+
+figure()
+set(0,'DefaultAxesColorOrder',jet(2*length(Ax)));
+%colormap('jet');
+for i = 1:length(Ax)
+    [t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrb.IC(i,:),[0 HaloOrb.time(i)],'forward');
+    plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
+    plot3(1-UserDat.mu,0,0,'p');
+end
+
+figure()
+m = 3;
+min = 1;
+set(0,'DefaultAxesColorOrder',jet(2*length(Ax)));
+%colormap('jet');
+for i = 1:length(Ax)
+    XGuessL(i,:) = InitialGuess(UserDat.PointLoc,G_var, 'halo', m, Ax(i));
+    %[t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrb.IC(i,:),[0 HaloOrb.time(i)],'forward');
+    [t,x] = Integrator(G_var,G_var.IntFunc.EOM,XGuessL(i,:),[0 10],'Events');
+    [t,x] = Integrator(G_var,G_var.IntFunc.EOM,XGuessL(i,:),[0 2*t(end)],'forward');
+    plot(x(:,1),x(:,2));hold on; grid on;
+    plot(1-UserDat.mu,0,'p');
+end
+
+
+
+%for i =1:length(t)
 %[LyapOrb]              = LyapOrbitParameters(UserDat,G_var, 2.86);
 
 toc

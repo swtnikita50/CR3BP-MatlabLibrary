@@ -74,7 +74,7 @@ G_var.Constants.ReqEnergy       = G_var.LagPts.Energy.L2;
 G_var.IntFunc.ODEoptions        = odeset('Reltol',3.e-14,'Abstol',1.e-16);% added 24/2/2020 16:10
 G_var.IntFunc.EOM               = @(t,x) CRes3BP_EOM(t,x,G_var.Constants.mu);% added 24/2/2020 18:55
 G_var.IntFunc.VarEqAndSTMdot    = @(t,x) VarEqAndSTMDOT(t,x,G_var.Constants.mu);% added 24/2/2020 18:55
-
+G_var.UserDat = UserDat;
 
                                                                                    
 
