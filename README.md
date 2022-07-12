@@ -19,4 +19,12 @@ References used:
 Some fucntions are yet Incomplete and mentioned 1st in the file
 
 
-More Yet to come...
+More to be added : 
+- Halo Orbit for L3
+- Vertical Orbit (L1/2/3/4/5)
+- Axial Orbit (L1/2/3/4/5)
+- Butterfly (L2/?)
+- Planar (L4/5)
+- Tadpole Orbit, Horseshoe Orbit (L4/5)
+- Resonant Orbits
+- Bifurcations and More...
