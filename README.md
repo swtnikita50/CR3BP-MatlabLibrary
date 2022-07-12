@@ -3,6 +3,20 @@ This code serves as a matlab Library for non-dimensional CRTBP System. Obtains: 
 
 Make use of following functions:
 - LyapOrbitParameters.m
+- LyapOrbitFamilyParameters.m
 - HaloOrbitParameters.m
+- HaloOrbitFamilyParameters.m
+- PeriodicOrbitInvariantMfdsIC.m
+
+References used:
+- Dynamical Syatems, the three-body problem and Space Mission Design, Koon, Lo, Marsden, Ross
+- Generating Periodic Orbits In CR3BP With Applications To Lunar South Pole Coverage - Daniel Grebow
+- Finding Order in Chaos: Resonant Orbits and Poincare Section - Maaninee Gupta
+- TADPOLE ORBITS IN THE L4/L5 REGION: CONSTRUCTION AND LINKS TO OTHER FAMILIES OF PERIODIC ORBITS - Alexandre G. Van Anderlecht
+- SPACECRAFT TRAJECTORY DESIGN TECHNIQUES USING RESONANT ORBITS - Srianish Vutukuri
+- REPRESENTATIONS OF INVARIANT MANIFOLDS FOR APPLICATIONS IN SYSTEM-TO-SYSTEM TRANSFER DESIGN - Christopher E. Patterson
+
+Some fucntions are yet Incomplete and mentioned 1st in the file
+
 
 More Yet to come...
