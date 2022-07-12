@@ -166,12 +166,13 @@ switch isOrbitFound
         [~,Monodromy,~,~] = StateTransAndX(G_var,xNew,funVarEq,tNew);
         [Eigens.S_EigVal,Eigens.US_EigVal,Eigens.C_Val,Eigens.S_EigVec,...
             Eigens.US_EigVec,Eigens.C_EigVec] = CalcEigenValVec(Monodromy,1) ;
-
+        StabilityIdx = CalcStabilityIdx(Eigens);
         LyapOrb.time      = tNew; %(NoofFam x 1) - Full Orbit Time
         LyapOrb.IC        = xNew; %(NoofFam x UserDat.Dimension)
         LyapOrb.Energy    = eNew;
         LyapOrb.Monodromy = Monodromy;
         LyapOrb.Eigens    = Eigens;
+        LyapOrb.StabilityIdx = StabilityIdx;
     case 0
 
         if e > eMax

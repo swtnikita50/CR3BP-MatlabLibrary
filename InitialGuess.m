@@ -36,7 +36,7 @@ Reference
    (see chapter 4 (Sec 4.4 - Step 2) for description)
 ...
 %}
-function[XGuess] = InitialGuess(PointLoc,G_var, orbitType, m,Ax)
+function[XGuess] = InitialGuess(PointLoc,G_var, orbitType, m)
 
 if nargin <3
     orbitType = 'lyapunov';
@@ -94,5 +94,5 @@ switch orbitType
                 dir = -1;
                 gamma = G_var.LagPts.Gamma(2);
         end
-        XGuess = thirdOrderRichardsonExpansion(gamma,dir,mu,delm,Ax);
+        XGuess = HaloLindstedtPoincare(gamma,dir,mu,delm);
 end

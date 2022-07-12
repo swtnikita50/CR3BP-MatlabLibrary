@@ -29,7 +29,6 @@ Dependencies
 %}
 
 function [Xn] = PeriodicOrbitInvariantMfdsIC(G_var,PeriodicOrbPar,n,type, dir)
-systemparameters;
 
 
 funVarEq = G_var.IntFunc.VarEqAndSTMdot;
@@ -48,11 +47,8 @@ X0 = PeriodicOrbPar.IC';
 
 
 k = 1;
-    %if isreal(eigVal)
         Y0int = eigVec(:,k);
-    %else
-        %break;
-    %end
+
 
     [~,PHItf,~,~,PHI] = StateTransAndX(G_var,X0,funVarEq,tf);
     i = 1;

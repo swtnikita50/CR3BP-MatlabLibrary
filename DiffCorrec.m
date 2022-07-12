@@ -47,11 +47,14 @@ f2 = G_var.IntFunc.VarEqAndSTMdot;
 tspan = [0 10];
 
 isMaxIterReached = 0;
-MaxIteration = 50;
+MaxIteration = 10;
 iteration = 1; % set the iteration value
 
+if X_Guess(3) == 0 && strcmp(orbitType,'halo')
+    orbitType = 'lyapunov';
+end
 
-
+tol = 1e-12;
 switch orbitType
     case 'lyapunov'
         Xfree = X_Guess(5);
@@ -61,7 +64,7 @@ end
 del_xDotf = 1;
 del_zDotf = 1;
 Fx = [del_xDotf;del_zDotf];
-while  norm(Fx)>1.e-10
+while  norm(Fx)>tol
     ax = gca; ax.ColorOrderIndex = iteration;
     
 % Check the max iteration and stop
@@ -147,10 +150,7 @@ switch orbitType
         x_DotDotf = X_DotDotf(4);
         z_DotDotf = X_DotDotf(6);
         DF = ([PHItf(4,1) PHItf(4,5);PHItf(6,1) PHItf(6,5)] - (1/y_Dotf)*[x_DotDotf;z_DotDotf]*[PHItf(2,1) PHItf(2,5)]);
-        
         DFn = -DF\Fx;
-        %DFn(1) = -DFn(1);
-        %DFn(2) = DFn(2)/20;
         Xfree = Xfree + DFn;
         % Guess Update
         X_Guess(1) = Xfree(1);

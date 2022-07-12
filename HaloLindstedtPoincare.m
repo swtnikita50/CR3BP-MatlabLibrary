@@ -43,21 +43,18 @@ l1 = -3/2*c3*(2*a21+a23+5*d21)-3/8*c4*(12-kappa^2)+2*lambda^2*s1;
 l2 = 2.0 * s2 * lambda^2 + a2;
 delta = wp^2-c2;
 
-if(Ax>sqrt(abs(delta/l1)))
-    Az = sqrt((-delta-l1*Ax^2)/l2);
-    nu2 = s1*Ax^2+s2*Az^2;
-    nu = 1+nu2;
+Ax = sqrt(abs(delta/l1));
+Az = sqrt((-delta-l1*Ax^2)/l2);
+nu2 = s1*Ax^2+s2*Az^2;
+nu = 1+nu2;
 
-    x0 = a21*Ax^2+a22*Az^2-Ax+a23*Ax^2-a24*Az^2+a31*Ax^3-a32*Ax*Az^2;
-    z0 = delm*Az+delm*d21*Ax*Az*(1-3)+delm*(d32*Az*Ax^2-d31*Az^3);
-    ydot0 = kappa*Ax+2*(b21*Ax^2-b22*Az^2)+3*(b31*Ax^3-b32*Ax*Az^2);
+x0 = a21*Ax^2+a22*Az^2-Ax+a23*Ax^2-a24*Az^2+a31*Ax^3-a32*Ax*Az^2;
+z0 = delm*Az+delm*d21*Ax*Az*(1-3)+delm*(d32*Az*Ax^2-d31*Az^3);
+ydot0 = kappa*Ax+2*(b21*Ax^2-b22*Az^2)+3*(b31*Ax^3-b32*Ax*Az^2);
 
-    x0 = gamma*x0-dir*gamma+1-mu;
-    z0 = gamma*z0;
-    ydot0 = gamma*wp*nu*ydot0;
+x0 = gamma*x0-dir*gamma+1-mu;
+z0 = gamma*z0;
+ydot0 = gamma*wp*nu*ydot0;
 
-    X = [x0,0, z0, 0,ydot0, 0];
-else
-    fprintf('\n Error: The x-Amplitude is lesser than the minimum Amplitude (%d) \n allowed for a halo orbit, with mu=%d.',sqrt(abs(delta/l1)),mu);
-end
+X = [x0,0, z0, 0,ydot0, 0];
 end
