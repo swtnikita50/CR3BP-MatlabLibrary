@@ -55,9 +55,9 @@ for family = 3:NoOfFam+1
 
 
         [~,Monodromy(:,:,family),~,~] = StateTransAndX(G_var,xCorrec(family,:),funVarEq,tCorrec(family));
-        [Eigens(family).S_EigVal,Eigens(family).US_EigVal,Eigens(family).C_Val,Eigens(family).S_EigVec,...
-        Eigens(family).US_EigVec,Eigens(family).C_EigVec] = CalcEigenValVec(Monodromy(:,:,family),1) ;
-    StabilityIdx(family,1) = CalcStabilityIdx(Eigens(family));
+        [Eigens.S_EigVal(family),Eigens.US_EigVal(family),Eigens.C_Val(family),Eigens.S_EigVec(family),...
+            Eigens.US_EigVec(family),Eigens.C_EigVec(family)] = CalcEigenValVec(Monodromy(:,:,family),1);
+        StabilityIdx(family,1) = CalcStabilityIdx(Eigens(family));
     S = (xCorrec(family-1,3) - xCorrec(family-2,3));
 end
 

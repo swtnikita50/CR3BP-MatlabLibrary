@@ -71,22 +71,6 @@ NOTE:
 6) ENTER ONLY "UserDat" asked for . This is fully sufficient.
 7) To know the flow see the file depencies above(if required).
 
-
-Description for entering Primary Secondary
--------------------------------------------
-1) Primary can be 'Sun' or any of the nine
-    Planets('Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus',
-    'Neptune' and 'Pluto')
-2) Secondary any of nine planets(if primary is sun) or natural satellites for the planets
-3) Case does not matter while entering any of these two 
-4) Enter as string inside double or single quotes.
-
-Natural Satellites included are 
-Jupiter - 'Callisto','Ganymede','Europa' and 'Io'.
-Saturn - 'Titan'
-Neptune - 'Triton'.
-Earth - 'moon'
-
 ...
 %}
 
@@ -102,7 +86,7 @@ UserDat.Dimension      = 3;% input('Give the problem dimension: ');
 UserDat.mu        = 0.0121505856;%input('Enter the primary body (string input): ');
 % Input for which equilibrium points you want the data for?
 UserDat.PointLoc       = 1;%input('For how many  equilibrium points do you want orbit parameters? : ');
-UserDat.NoOfFam        = 20;%input('Number of Family? : ');
+UserDat.NoOfFam        = 50;%input('Number of Family? : ');
 % Check if you want to see correction plot(Enter 0 or 1).
 UserDat.CorrectionPlot = 1;%input('Do You want to see correction plot of differential correction?:');
 
@@ -112,35 +96,50 @@ tic
 G_var                  = GlobalData(UserDat);
 fprintf('mu value %f\n',G_var.Constants.mu);
 
-[LyapOrbFam] = LyapOrbitFamilyParameters(UserDat,G_var);
-figure()
-%plot(LyapOrbFam.Energy, LyapOrbFam.StabilityIdx(:,1).Saddle);hold on;
-plot(LyapOrbFam.Energy, LyapOrbFam.time,'-r','LineWidth',2);
-% Ax = 0.1025;
-% % [HaloOrbFam]              = HaloOrbitFamilyParameters(UserDat,G_var, 'southern',3);
-% % ans1 = PeriodicOrbitInvariantMfdsIC(G_var,HaloOrb,80, 'stable',1);
-% % figure()
-% % set(0,'DefaultAxesColorOrder',jet(length(HaloOrb.Energy)));
-% % for i = 1:length(HaloOrb.Energy)
-% %     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrb.IC(i,:),[0 HaloOrb.time(i)],'forward');
-% %     plot3(x(:,1),x(:,2),x(:,3),'LineWidth',2);hold on; grid on;
-% %     scatter3(1-UserDat.mu,0,0,'p','filled');
-% % end
-% % for i = 1:length(ans1(:,1))
-% %     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,ans1(i,1:6),[0 3*HaloOrb.time],'backward');
-% %     plot3(x(:,1),x(:,2),x(:,3),'g');hold on; grid on;
-% %     plot3(1-UserDat.mu,0,0,'p');
-% %end
-
-
-% [LyapOrb]              = LyapOrbitParameters(UserDat,G_var, 2.8);
-% ans = PeriodicOrbitInvariantMfdsIC(G_var,LyapOrb,80, 'stable',1);
+%  [LyapOrbFam] = LyapOrbitFamilyParameters(UserDat,G_var);
+%  figure()
+% % %plot(LyapOrbFam.Energy, LyapOrbFam.StabilityIdx(:,1).Saddle);hold on;
+% plot(LyapOrbFam.Energy, LyapOrbFam.time,'-r','LineWidth',2);
 % figure()
-% for i = 1:length(ans(:,1))
-%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,ans(i,1:6),[0 2*LyapOrb.time],'backward');
-%     plot(x(:,1),x(:,2),'g');hold on; grid on;
-%     plot(1-UserDat.mu,0,'p');
+% set(0,'DefaultAxesColorOrder',flipud(jet(length(LyapOrbFam.Energy))));
+% for i = 1:length(LyapOrbFam.Energy)
+%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,LyapOrbFam.IC(i,:),[0 LyapOrbFam.time(i)],'forward');
+%     plot(x(:,1),x(:,2));hold on; grid on;
 % end
+% scatter(1-UserDat.mu,0,'p','filled');
+% caxis([LyapOrbFam.Energy(end), LyapOrbFam.Energy(1)]);colormap("jet");
+% colorbar
+% xlabel('x (ND)')
+% ylabel('y (ND)')
+% zlabel('z (ND)')
+% title('Lyapunov Orbit Family at L1 for mu = 0.01215');
+
+% [HaloOrbFam]              = HaloOrbitFamilyParameters(UserDat,G_var, 'northern');
+% figure()
+% set(0,'DefaultAxesColorOrder',flipud(jet(length(HaloOrbFam.Energy))));
+% for i = 1:length(HaloOrbFam.Energy)
+%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrbFam.IC(i,:),[0 HaloOrbFam.time(i)],'forward');
+%     plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
+% end
+% scatter3(1-UserDat.mu,0,0,'p','filled');
+% caxis([HaloOrbFam.Energy(end), HaloOrbFam.Energy(1)]);
+% colorbar
+% ans1 = PeriodicOrbitInvariantMfdsIC(G_var,HaloOrb,80, 'stable',1);
+% for i = 1:length(ans1(:,1))
+%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,ans1(i,1:6),[0 3*HaloOrb.time],'backward');
+%     plot3(x(:,1),x(:,2),x(:,3),'g');hold on; grid on;
+%     plot3(1-UserDat.mu,0,0,'p');
+% end
+
+
+[LyapOrb]              = LyapOrbitParameters(UserDat,G_var, 3.17);
+ans1 = PeriodicOrbitInvariantMfdsIC(G_var,LyapOrb,80, 'stable',1);
+figure()
+for i = 1:length(ans1(:,1))
+    [t,x] = Integrator(G_var,G_var.IntFunc.EOM,ans1(i,1:6),[0 1.5*LyapOrb.time],'backward');
+    plot(x(:,1),x(:,2),'g');hold on; grid on;
+end
+    scatter(1-UserDat.mu,0,'p','filled','r');
 
 toc
 % takes 21.493200 seconds for earth moon system(for 30- orbits) with i7 - 4 core and 16g Ram ,without
