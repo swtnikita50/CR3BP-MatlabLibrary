@@ -2,11 +2,11 @@
 This code serves as a matlab Library for non-dimensional CRTBP System. Obtains: Lyapunov Orbit and Halo Orbit Parameters. Future Updates: Functions for all symmetric and asymmetric orbits (given in Daniel Grebow's Master's thesis) , Invarient Manifold functions, Resonant Orbit Functions (as in Manninie Gupta's Master's Thesis) and more. Invarient Manifold Code can be found in 3-Body_Problem Code.
 
 Make use of following functions:
-- LyapOrbitParameters.m
-- LyapOrbitFamilyParameters.m
-- HaloOrbitParameters.m
-- HaloOrbitFamilyParameters.m
-- PeriodicOrbitInvariantMfdsIC.m
+- 'LyapOrbitParameters.m' gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of a lyapunov orbit for spacific mu, liberation point and jacobian.
+- 'LyapOrbitFamilyParameters.m' gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of family of lyapunov orbits for spacific mu and liberation point.
+- 'HaloOrbitParameters.m' gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of a Halo orbit (northern and Southern should be specified) for spacific mu, liberation point and jacobian.
+- 'HaloOrbitFamilyParameters.m' gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of family of Halo orbits (northern and Southern should be specified) for spacific mu and liberation point.
+- 'PeriodicOrbitInvariantMfdsIC.m' returns the Initial Conditions to compute Invariant Manifolds (Stable+/-, Unstable+/-) for a given Periodic Orbit. The direction needs to be taken care of! 
 
 References used:
 - Dynamical Syatems, the three-body problem and Space Mission Design, Koon, Lo, Marsden, Ross
