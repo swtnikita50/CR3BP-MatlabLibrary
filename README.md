@@ -43,15 +43,16 @@ title('Lyapunov Orbit Family at L1 for mu = 0.01215 and e = 3.16');
 ```
 
 ```ruby
-e = 3.16;
-[LyapOrb] = LyapOrbitParameters(UserDat,G_var,e);
+e = 3.1;
+[HaloOrb] = HaloOrbitParameters(UserDat,G_var,e);
 figure()
-[t,x] = Integrator(G_var,G_var.IntFunc.EOM,LyapOrb.IC,[0 LyapOrb.time],'forward');
-plot(x(:,1),x(:,2));hold on; grid on;
-scatter(1-UserDat.mu,0,'p','filled');
+[t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrb.IC,[0 HaloOrb.time],'forward');
+plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
+scatter3(1-UserDat.mu,0,0,'p','filled');
 xlabel('x (ND)')
 ylabel('y (ND)')
-title('Lyapunov Orbit Family at L1 for mu = 0.01215 and e = 3.16');
+zlabel('z (ND)')
+title('Halo Orbit Family at L1 for mu = 0.01215 and e = 3.1');
 ```
 
 
@@ -97,7 +98,7 @@ colorbar
 xlabel('x (ND)')
 ylabel('y (ND)')
 zlabel('z (ND)')
-title('Lyapunov Orbit Family at L1 for mu = 0.01215');
+title('Halo Orbit Family at L1 for mu = 0.01215');
 ```
 <img src="images/northernHalo1.png" width="400">
 <img src="images/northernHalo2.png" width="400">
