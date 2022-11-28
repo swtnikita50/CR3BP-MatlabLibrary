@@ -44,7 +44,7 @@ title('Lyapunov Orbit Family at L1 for mu = 0.01215 and e = 3.16');
 
 ```ruby
 e = 3.1;
-[HaloOrb] = HaloOrbitParameters(UserDat,G_var,e);
+[HaloOrb] = HaloOrbitParameters(UserDat,G_var,'northern',e);
 figure()
 [t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrb.IC,[0 HaloOrb.time],'forward');
 plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
