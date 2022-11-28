@@ -30,6 +30,31 @@ G_var                  = GlobalData(UserDat);
 - `UserDat.PointLoc` specifies which equilibrium points you want the data for? can take 1,2,3 for now
 - `UserDat.CorrectionPlot` can take 1 and 0 specifying if you want differential correction plots or not.
 
+```ruby
+e = 3.16;
+[LyapOrb] = LyapOrbitParameters(UserDat,G_var,e);
+figure()
+[t,x] = Integrator(G_var,G_var.IntFunc.EOM,LyapOrb.IC,[0 LyapOrb.time],'forward');
+plot(x(:,1),x(:,2));hold on; grid on;
+scatter(1-UserDat.mu,0,'p','filled');
+xlabel('x (ND)')
+ylabel('y (ND)')
+title('Lyapunov Orbit Family at L1 for mu = 0.01215 and e = 3.16');
+```
+
+```ruby
+e = 3.16;
+[LyapOrb] = LyapOrbitParameters(UserDat,G_var,e);
+figure()
+[t,x] = Integrator(G_var,G_var.IntFunc.EOM,LyapOrb.IC,[0 LyapOrb.time],'forward');
+plot(x(:,1),x(:,2));hold on; grid on;
+scatter(1-UserDat.mu,0,'p','filled');
+xlabel('x (ND)')
+ylabel('y (ND)')
+title('Lyapunov Orbit Family at L1 for mu = 0.01215 and e = 3.16');
+```
+
+
 ### Example:1 Plotting Lyapunov Orbit Family
 
 
