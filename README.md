@@ -7,12 +7,15 @@ This code serves as a matlab Library for non-dimensional CRTBP System. Obtains: 
 
 Make use of following functions:
 
-* `LyapOrbitParameters.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of a lyapunov orbit for spacific mu, liberation point and jacobian.
-* `LyapOrbitFamilyParameters.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of family of lyapunov orbits for spacific mu and liberation point.
-* `HaloOrbitParameters.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of a Halo orbit (northern and Southern should be specified) for spacific mu, liberation point and jacobian.
-* `HaloOrbitFamilyParameters.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of family of Halo orbits (northern and Southern should be specified) for spacific mu and liberation point.
-* `PeriodicOrbitInvariantMfdsIC.m` returns the Initial Conditions to compute Invariant Manifolds (Stable+/-, Unstable+/-) for a given Periodic Orbit. The direction needs to be taken care of!
-* `Integrator.m` make use of this fucntion to compute the final Periodic Orbits
+* `lyapunovOrbit.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of a lyapunov orbit for spacific mu, liberation point and jacobian.
+* `lyapunovFamily.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of family of lyapunov orbits for spacific mu and liberation point.
+* `haloOrbit.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of a Halo orbit (northern and Southern should be specified) for spacific mu, liberation point and jacobian.
+* `haloFamily.m` gives the Initial Conditions and other parameters (time period, Eigen Structure, Stability Index etc.) in the non-dimentinal CR3BP of family of Halo orbits (northern and Southern should be specified) for spacific mu and liberation point.
+* `orbitInvManifoldIC.m` returns the Initial Conditions to compute Invariant Manifolds (Stable+/-, Unstable+/-) for a given Periodic Orbit. The direction needs to be taken care of!
+* `integrate.m` make use of this fucntion to compute the final Periodic Orbits
+* `plotOrbit.m` plots any orbit specified
+* `plotfamily.m` plots any family specified
+* `plotInvManifold.m` plots invariant manifold to specified orbit. Caution: It only stable manifolds for now, you can change it inside this fucntion.
 
 ## Examples
 
