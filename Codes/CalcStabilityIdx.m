@@ -1,9 +1,10 @@
 % Created on: 12-07-22 (16:46)
-function StabilityIdx = CalcStabilityIdx(Eigens)
-for i = 1:length(Eigens.S_EigVal)
-    StabilityIdx.Saddle(i) = 1/2*(abs(Eigens.S_EigVal(i)) + abs(Eigens.US_EigVal(i)));
-end
-for i = 2:2:length(Eigens.C_Val)
-    StabilityIdx.C(i/2) = 1/2*(norm(Eigens.C_Val(i))+norm(1/Eigens.C_Val(i)));
-end
+function stabilityIdx = calcStabilityIdx(eigens)
+    stabilityIdx.saddle = 1/2*(eigens.val.stable + eigens.val.unstable);
+    for i = 1:length(eigens.val.center)/2
+        stabilityIdx.center = 1/2*(eigens.val.center(2*i-1)+eigens.val.center(2*i));
+    end
+    if ~isempty(eigens.val.p)
+        stabilityIdx.p = 1/2*(eigens.val.p(1)+eigens.val.p(2));
+    end
 end

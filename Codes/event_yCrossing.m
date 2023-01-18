@@ -19,17 +19,17 @@ Dependencies
 None
 ...
 %}
-function [position,isterminal,direction] = Events_cres(t,x,G_var)
+function [position,isterminal,direction] = event_yCrossing(t,x,globalVar)
 
 
-mu = G_var.Constants.mu;
+mu = globalVar.userInput.mu;
 
 
 
 isterminal = 1; 
 position = x(2);
 
-switch G_var.UserDat.PointLoc
+switch globalVar.userInput.lagrangePt
     case 1
         direction = -1;
     case 2

@@ -26,22 +26,22 @@ Inputs
 
 Outputs
 --------
-1) G_var - structure with fields 
-                  - Constants - structure with fields
+1) globalVar - structure with fields 
+                  - const - structure with fields
                         - mu
                         - gam
                         - Ax1
                         - Ax2
-                  - LagPts - structure with fields
+                  - lagPts - structure with fields
                         - Gamma (distance fom the Eq.pts to primaries)
                         - L1,L2,L3,L4,L5(location of eq.points)
                         - Energy(a structure with fields L1 to L5)
                         - EigeVec(a structure with fields L1 to L5)
                         - EigeVal(a structure with fields L1 to L5)
-                  - IntFunc - structure with fields
-                        - ODEoptions
-                        - EOM
-                        - VarEqAndSTMdot
+                  - internalFunc - structure with fields
+                        - odeOptions
+                        - dynamics
+                        - varEq_STMdot
 
 Dependencies
 ------------
@@ -60,21 +60,21 @@ Reference
 Initial seed amplitude value calculations are fron Ref(2)
 ...
 %}
-function G_var = GlobalData(UserDat)
+function globalVar = GlobalData(userInput)
 
-G_var.Constants.mu              = UserDat.mu;
-G_var.Constants.gam             = (G_var.Constants.mu/3)^(1/3) ;
-G_var.Constants.Ax1             = 2e-2*G_var.Constants.gam;% initial amplitude 1 for seed orbit
-G_var.Constants.Ax2             = 2*G_var.Constants.Ax1; % initial amplitude 2 for second seed orbit
+globalVar.userInput             = userInput;
+globalVar.const.gam             = (userInput.mu/3)^(1/3) ;
+globalVar.const.Ax1             = 2e-2*globalVar.const.gam;% initial amplitude 1 for seed orbit
+globalVar.const.Ax2             = 2*globalVar.const.Ax1; % initial amplitude 2 for second seed orbit
 
-G_var.LagPts                    = equil_pts_position(G_var.Constants.mu); % see "equil_pts_position.m"
+globalVar.lagPts                    = equilPts(userInput.mu); % see "equil_pts_position.m"
 
-G_var.Constants.ReqEnergy       = G_var.LagPts.Energy.L2;
+globalVar.const.jacobianMax       = globalVar.lagPts.jacobianConst(userInput.lagrangePt);
 
-G_var.IntFunc.ODEoptions        = odeset('Reltol',3.e-14,'Abstol',1.e-16);% added 24/2/2020 16:10
-G_var.IntFunc.EOM               = @(t,x) CRes3BP_EOM(t,x,G_var.Constants.mu);% added 24/2/2020 18:55
-G_var.IntFunc.VarEqAndSTMdot    = @(t,x) VarEqAndSTMDOT(t,x,G_var.Constants.mu);% added 24/2/2020 18:55
-G_var.UserDat = UserDat;
+globalVar.functions.odeOptions      = odeset('Reltol',3.e-14,'Abstol',1.e-16);% added 24/2/2020 16:10
+globalVar.functions.systemDynamics  = @(t,x) CR3BP(t,x,userInput.mu);% added 24/2/2020 18:55
+globalVar.functions.varEq_stmDot    = @(t,x) varEq_stmDot(t,x,userInput.mu);% added 24/2/2020 18:55
+
 
                                                                                    
 

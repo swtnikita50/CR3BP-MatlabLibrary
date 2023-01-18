@@ -26,10 +26,10 @@ Dependencies
  
 ...
 %}
-function [t,PHItf,x,xf,PHI] = StateTransAndX(G_var,X_Guess,fun,tend)
+function [t,PHItf,x,xf,PHI] = stm_X(globalVar,xGuess,fun,tend)
 
-VarEq_InitVal = VarEq_Init(X_Guess);
-[tInteg,xInteg] = Integrator(G_var,fun,VarEq_InitVal,[0 tend]);
+varEq_initVal = varEq_initialization(xGuess);
+[tInteg,xInteg] = integrate(globalVar,fun,varEq_initVal,[0 tend]);
 
 N = size(xInteg,2);
 if N == 20
@@ -40,17 +40,17 @@ end
 
 switch type
     case 'Planar'
-t = tInteg;
-PHI = xInteg;
-PHItf = reshape(xInteg(end,1:16),4,4);
-x = xInteg(:,17:20);
-xf = xInteg(end,17:20);
+        t = tInteg;
+        PHI = xInteg;
+        PHItf = reshape(xInteg(end,1:16),4,4);
+        x = xInteg(:,17:20);
+        xf = xInteg(end,17:20);
 
     case'ThreeDim'
         t = tInteg;
         PHI = xInteg;
-PHItf = reshape(xInteg(end,1:36),6,6);
-x = xInteg(:,37:42);
-xf = xInteg(end,37:42);
+        PHItf = reshape(xInteg(end,1:36),6,6);
+        x = xInteg(:,37:42);
+        xf = xInteg(end,37:42);
 end
 

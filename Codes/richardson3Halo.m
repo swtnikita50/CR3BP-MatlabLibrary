@@ -1,4 +1,4 @@
-function X = HaloLindstedtPoincare(gamma,dir,mu, delm,Ax)
+function X = richardson3Halo(gamma,dir,mu, delm)
 
 c2 = 1/gamma^3*((dir)^2*mu+(-1)^2*(1-mu)*gamma^(2+1)/(1-dir*gamma)^(2+1));
 c3 = 1/gamma^3*((dir)^3*mu+(-1)^3*(1-mu)*gamma^(3+1)/(1-dir*gamma)^(3+1));

@@ -39,7 +39,7 @@ File dependencies (Implicit - I)
   1) DiffCorrec             - will call E(1) I(3) I(4) I(5)
   2) Integrator             - will call I(5) 
   3) StateTransAndX         - willcall I(6),I(3) and I(3) will call (7)
-  4) CRes3BP_EOM
+  4) CRes3BP_systemDynamics
   5) VarEq_Init 
   6) VarEqAndSTMDOT         - will call E(1) I(8) I(5) 
   7) Dfmatrix3D
@@ -68,7 +68,7 @@ NOTE:
     This is made for convience because once the parameters are saved for a
     particular primary and secondary, one can extract and plot the required
     data any number of times without having to worry to run whole script again.
-6) ENTER ONLY "UserDat" asked for . This is fully sufficient.
+6) ENTER ONLY "userInput" asked for . This is fully sufficient.
 7) To know the flow see the file depencies above(if required).
 
 ...
@@ -77,106 +77,49 @@ NOTE:
 %% --------------------------------- Mainline Program ----------------------------------------------------------------
 clearvars;clc;close all
 
-%% Get the UserData
+%% Get the userInputa
 % ------------------
 % The program can handle both 2 and 3 dimension
-UserDat.Dimension      = 3;% input('Give the problem dimension: ');
+userInput.Dimension      = 3;% input('Give the problem dimension: ');
 % Input the Primary/Secondary
 % See the description above before entering Primary and Secondary
-UserDat.mu        = 0.0121505856;%input('Enter the primary body (string input): ');
+userInput.mu        = 0.0121505856;%input('Enter the primary body (string input): ');
 % Input for which equilibrium points you want the data for?
-UserDat.PointLoc       = 1;%input('For how many  equilibrium points do you want orbit parameters? : ');
-UserDat.NoOfFam        = 50;%input('Number of Family? : ');
+userInput.lagrangePt       = 1;%input('For how many  equilibrium points do you want orbit parameters? : ');
+userInput.orbitCount  = 10;%input('Orbit Count of family? : ');
 % Check if you want to see correction plot(Enter 0 or 1).
-UserDat.CorrectionPlot = 1;%input('Do You want to see correction plot of differential correction?:');
-
+userInput.plotDiffCorrec = 1;%input('Do You want to see correction plot of differential correction?:');
+userInput.orbit          = 'halo';
+userInput.type           = 'northern';
+userInput.tolerance      = 1e-6;
+userInput.jacobianConst  = 3.1;
 
 tic
 
-G_var                  = GlobalData(UserDat);
-fprintf('mu value %f\n',G_var.Constants.mu);
+globalVar                  = GlobalData(userInput);
+fprintf('mu value %f\n',globalVar.userInput.mu);
 
-%  [LyapOrbFam] = LyapOrbitFamilyParameters(UserDat,G_var);
-%  figure()
-% % %plot(LyapOrbFam.Energy, LyapOrbFam.StabilityIdx(:,1).Saddle);hold on;
-% plot(LyapOrbFam.Energy, LyapOrbFam.time,'-r','LineWidth',2);
+%% Input Orbit Code here
+plotInvManifold(globalVar);
+
+
+%[familyPar]              = lyapunovFam(userInput,globalVar);
+%%
+
+% OrbFamPar = familyPar;
+% 
 % figure()
-% set(0,'DefaultAxesColorOrder',flipud(jet(length(LyapOrbFam.Energy))));
-% for i = 1:length(LyapOrbFam.Energy)
-%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,LyapOrbFam.IC(i,:),[0 LyapOrbFam.time(i)],'forward');
-%     plot(x(:,1),x(:,2));hold on; grid on;
+% viscircles([0,0],1), grid on; hold on;
+% for i = 1:userInput.NoOfFam
+%     scatter(real(OrbFamPar.Eigens(i).C_Val(1)),imag(OrbFamPar.Eigens(i).C_Val(1)),'ob','filled');
+%     scatter(real(OrbFamPar.Eigens(i).C_Val(2)),imag(OrbFamPar.Eigens(i).C_Val(2)),'ob','filled');
 % end
-% scatter(1-UserDat.mu,0,'p','filled');
-% caxis([LyapOrbFam.Energy(end), LyapOrbFam.Energy(1)]);colormap("jet");
-% colorbar
-% xlabel('x (ND)')
-% ylabel('y (ND)')
-% zlabel('z (ND)')
-% title('Lyapunov Orbit Family at L1 for mu = 0.01215');
-
-% [HaloOrbFam]              = HaloOrbitFamilyParameters(UserDat,G_var, 'northern');
-% figure()
-% set(0,'DefaultAxesColorOrder',flipud(jet(length(HaloOrbFam.Energy))));
-% for i = 1:length(HaloOrbFam.Energy)
-%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,HaloOrbFam.IC(i,:),[0 HaloOrbFam.time(i)],'forward');
-%     plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
-% end
-% scatter3(1-UserDat.mu,0,0,'p','filled');
-% caxis([HaloOrbFam.Energy(end), HaloOrbFam.Energy(1)]);
-% colorbar
-% ans1 = PeriodicOrbitInvariantMfdsIC(G_var,HaloOrb,80, 'stable',1);
-% for i = 1:length(ans1(:,1))
-%     [t,x] = Integrator(G_var,G_var.IntFunc.EOM,ans1(i,1:6),[0 3*HaloOrb.time],'backward');
-%     plot3(x(:,1),x(:,2),x(:,3),'g');hold on; grid on;
-%     plot3(1-UserDat.mu,0,0,'p');
-% end
-
-
-[LyapOrb]              = LyapOrbitParameters(UserDat,G_var, 3.17);
-ans1 = PeriodicOrbitInvariantMfdsIC(G_var,LyapOrb,80, 'stable',1);
-figure()
-for i = 1:length(ans1(:,1))
-    [t,x] = Integrator(G_var,G_var.IntFunc.EOM,ans1(i,1:6),[0 1.5*LyapOrb.time],'backward');
-    plot(x(:,1),x(:,2),'g');hold on; grid on;
-end
-    scatter(1-UserDat.mu,0,'p','filled','r');
-
-toc
+% xlabel('Real')
+% ylabel('Imaginary')
+% title('Eigen Structure Associated with Center Subspace');
+% 
+% 
+% plotBifurcationSln(globalVar,OrbFamPar);
+% toc
 % takes 21.493200 seconds for earth moon system(for 30- orbits) with i7 - 4 core and 16g Ram ,without
 % parallel pool.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%% Not Required (This is natural Parameter Continuation)
-% ================================================================================================
-% [XGuess] = InitialGuess(UserDat.PointLoc);
-% [Corrected.time,Corrected.InitialX,Corrected.DF] =...
-% GrebowContinuation(XGuess(1),UserDat.NoofFam,UserDat.CorrectionPlot);
-% =================================================================================================

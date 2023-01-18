@@ -28,7 +28,7 @@ Dependencies
 ------------
 1) MATLAB inbuilt ODE113 integrator
 %}
-function [t,x] = Integrator(G_var,fun,x0,tspan,type)
+function [t,x] = integrate(globalVar,fun,x0,tspan,type)
 
 
 if nargin<3
@@ -43,15 +43,15 @@ end
 
 switch type
     case 'forward'
-           options  = G_var.IntFunc.ODEoptions;
-           [t,x]    = ode113(fun,tspan,x0,options);
+        options  = globalVar.functions.odeOptions;
+        [t,x]    = ode113(fun,tspan,x0,options);
   
     case 'backward'
-            options = G_var.IntFunc.ODEoptions;
-            [t,x]   = ode113(fun,-tspan,x0,options);
-    case 'Events'
-            EventFunc = @(t,x) Events_cres(t,x,G_var);
-            options = odeset('Reltol',1e-12,'Abstol',1e-12,'Events',EventFunc);
-            [t,x]=ode113(fun,tspan,x0,options);
+        options = globalVar.functions.odeOptions;
+        [t,x]   = ode113(fun,-tspan,x0,options);
+    case 'crossing'
+        eventFunc = @(t,x) event_yCrossing(t,x,globalVar);
+        options   = odeset('Reltol',1e-12,'Abstol',1e-12,'Events',eventFunc);
+        [t,x]     = ode113(fun,tspan,x0,options);
 end
 end
