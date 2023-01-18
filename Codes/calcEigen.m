@@ -1,6 +1,3 @@
-% This is taken from SD Ross website available for free. 
-% [sn,un,cn,Ws,Wu,Wc] = eigGet(A,discrete) ;
-%
 % Compute the eigenvalues and eigenvectors of the matrix A spanning the 
 % three local subspaces <Es,Eu,Ec> where A is MxM and s+u+c=M, which
 % locally approximate the invariant manifolds <Ws,Wu,Wc>
@@ -9,15 +6,11 @@
 % if continuous time system, discrete = 0
 %
 % Shane Ross (revised 2.19.04)
-
-
-
-
+% This is taken from SD Ross website available for free and modified. 
+% [sn,un,cn,Ws,Wu,Wc] = eigGet(A,discrete) ;
 
 
 function [sn,un,cn,pn,Ws,Wu,Wc,Wp,V,D] = calcEigen(A,discrete) 
-
-
 
 sn=[];
 un=[];

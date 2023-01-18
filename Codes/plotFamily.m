@@ -1,5 +1,11 @@
+% Plots family of orbits of different families:
+% 1. Lyapunov
+% 2. Halo
+% More to come...
+
 function plotFamily(globalVar)
 
+% Extracting Initial Conditions for Plotting the Orbit
 switch globalVar.userInput.orbit
     case 'lyapunov'
         [familyPar]              = lyapunovFamily(globalVar);
@@ -7,6 +13,7 @@ switch globalVar.userInput.orbit
         [familyPar]              = haloFamily(globalVar);
 end
 
+% Plotting the Family
 figure()
 set(0,'DefaultAxesColorOrder',flipud(jet(length(familyPar.jacobianConst))));
 for i = 1:length(familyPar.jacobianConst)

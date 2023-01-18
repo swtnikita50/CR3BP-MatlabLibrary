@@ -1,10 +1,4 @@
-%{
-...
-This is the Equation of Motion of the CR3BP
-
-Created on feb 20 2020 15:50
-...
-%}
+% Equation of motion for circular restricted 3 body problem
 
 function X_Dot = CR3BP(t,X,mu)
 

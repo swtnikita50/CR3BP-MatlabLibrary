@@ -1,14 +1,25 @@
+% Plots inavriant manifolds of orbits of different families:
+% 1. Lyapunov
+% 2. Halo
+% More to come...
+
 function plotInvManifold(globalVar)
+
+% Extracting Initial Conditions for Plotting the Orbit
 switch globalVar.userInput.orbit
     case 'lyapunov'
         orbPar = lyapunovOrbit(globalVar);
     case 'halo'
         orbPar = haloOrbit(globalVar);
 end
-ans1 = orbitInvManifoldIC(globalVar,orbPar,80, 'stable',1);
+
+% Initial Condition for invarient Manifolds
+invManifoldIC = orbitInvManifoldIC(globalVar,orbPar,80, 'stable',1);
+
+% Plotting
 figure()
-for i = 1:length(ans1(:,1))
-    [t,x] = integrate(globalVar,globalVar.functions.systemDynamics,ans1(i,1:6),[0 1.5*orbPar.period],'backward');
+for i = 1:length(invManifoldIC(:,1))
+    [t,x] = integrate(globalVar,globalVar.functions.systemDynamics,invManifoldIC(i,1:6),[0 1.5*orbPar.period],'backward');
     plot3(x(:,1),x(:,2),x(:,3),'g');hold on; grid on;
 end
 scatter3(1-globalVar.userInput.mu,0,0,'p','filled','r');
