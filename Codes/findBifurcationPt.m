@@ -1,4 +1,3 @@
-% Copyright Nikita December 2022
 % Uses: findEigenStructureChange
 %       continuatuion 
 
