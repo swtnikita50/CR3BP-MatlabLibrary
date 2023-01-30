@@ -14,12 +14,13 @@ Make use of following functions:
 * `orbitInvManifoldIC.m` returns the Initial Conditions to compute Invariant Manifolds (Stable+/-, Unstable+/-) for a given Periodic Orbit. The direction needs to be taken care of!
 * `integrate.m` make use of this fucntion to compute the final Periodic Orbits
 * `plotOrbit.m` plots any orbit specified
-* `plotfamily.m` plots any family specified
+* `plotFamily.m` plots any family specified
 * `plotInvManifold.m` plots invariant manifold to specified orbit. Caution: It only stable manifolds for now, you can change it inside this fucntion.
+* `plotBifurcationSln` plots biofurcation solution only for lyapunov orbit (working on halo orbit)
 
 ## Examples
 
-Inputting System Variables
+Inputting System Variables (can be found in runme.m file)
 
 ```ruby 
 userInput.Dimension      = 3;   % 2/3
@@ -67,8 +68,6 @@ plotInvManifold(globalVar)
 
 
 ## References Used
-
-
     - Dynamical Syatems, the three-body problem and Space Mission Design, Koon, Lo, Marsden, Ross
     - Generating Periodic Orbits In CR3BP With Applications To Lunar South Pole Coverage - Daniel Grebow
     - Finding Order in Chaos: Resonant Orbits and Poincare Section - Maaninee Gupta
