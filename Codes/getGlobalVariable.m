@@ -60,7 +60,7 @@ Reference
 Initial seed amplitude value calculations are fron Ref(2)
 ...
 %}
-function globalVar = GlobalData(userInput)
+function globalVar = getGlobalVariable(userInput)
 
 globalVar.userInput             = userInput;
 globalVar.const.gam             = (userInput.mu/3)^(1/3) ;

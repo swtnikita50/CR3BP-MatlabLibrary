@@ -4,7 +4,7 @@
 % More to come
 
 function plotOrbit(globalVar)
-
+f1 = globalVar.userInput.orbitPlot;
 % Extracting Initial Conditions for Plotting the Orbit
 switch globalVar.userInput.orbit
     case 'lyapunov'
@@ -14,7 +14,7 @@ switch globalVar.userInput.orbit
 end
 
 % Plotting the Orbit
-figure()
+figure(f1)
 [~,x] = integrate(globalVar,globalVar.functions.systemDynamics,familyPar.IC,[0 familyPar.period],'forward');
 plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
 scatter3(globalVar.lagPts.pos(globalVar.userInput.lagrangePt,1),globalVar.lagPts.pos(globalVar.userInput.lagrangePt,2),0,'p','filled');

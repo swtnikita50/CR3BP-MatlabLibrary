@@ -3,20 +3,19 @@
 Created on  30/6/2022 17:42
 taken from Karthi and then modified.
 
-This File performs the Diffrential Correction Process.
+Applies differential correction on guess solutions
 
 Inputs
 ------
 1) xGuess - initial guess Calculated by the 'InitialGuess' function file.
-2) Plot - User Supplied in MAINScript(will be 0/1)-See description in
-   MAIN_LyapOrbit.m
+2) globalVar - Global Variable
 
 Outputs
 --------
 1) tCorrec - Corrected half time value for perpendicular XZ plane crossing
 2) xCorrec - Corrected Initial Value to obtain the periodic orbit.
 3) DF - Final DF matrix(this is just for the user to see)
-4) isMaxIterReached - 1 if No of iters = Maxiters is reached, 0 otheriwse
+4) isMaxIterReached - 1 if No of iters = maxIters is reached, 0 otheriwse
 
 References
 ----------
@@ -38,10 +37,12 @@ method, refrences are just for convinience, one can follow any source.
 function [tCorrec,xCorrec,DF,isMaxIterReached] = diffCorrec(xGuess,globalVar)
 % Extract from Global Data
 orbit = globalVar.userInput.orbit;
-
 f1 = globalVar.functions.systemDynamics;
 f2 = globalVar.functions.varEq_stmDot;
-tol = globalVar.userInput.tolerance^2;
+tol = globalVar.userInput.tolerance*10^(-2);
+fig1 = globalVar.userInput.diffCorrecPlot;
+
+% arbitrary time span, should be long enough to reach the y crossing event
 tspan = [0 10];
 
 isMaxIterReached = 0;
@@ -89,11 +90,10 @@ while  norm(Fx)>tol
     end
 
 
-    % Plot the correction(Just to see how differential correction works) If
-    % Required - adopted from Prof SD Ross code
-
+    % Plot the correction(Just to see how differential correction works)
     %[tbnew,xbnew] = integrate(globalVar,f1,xGuess,[0 2*tb(end)]);
     if globalVar.userInput.plotDiffCorrec == 1
+        figure(fig1)
         ax = gca; ax.ColorOrderIndex = iter;
         switch orbit
             case 'lyapunov'
@@ -110,8 +110,6 @@ while  norm(Fx)>tol
                 ax = gca; ax.ColorOrderIndex = iter;
 
                 hold on; grid on
-                %plot3(xbnew(:,1),xbnew(:,2),xbnew(:,3))
-                %ax = gca; ax.ColorOrderIndex = iter;
                 plot3(xb(1,1),xb(1,2),xb(1,3),'*')
                 ax = gca; ax.ColorOrderIndex = iter;
                 plot3(xb(end,1),xb(end,2),xb(end,3),'o')
@@ -126,6 +124,7 @@ while  norm(Fx)>tol
     % Now get the STM(State Transistion Matrix)
 
     [t,PHItf,x,xf] = stm_X(globalVar,xGuess,f2,tb(end));
+    
     % Get the final Vector Field from the EOM
     X_DotDotf = CR3BP([],xb(end,:),globalVar.userInput.mu);
 

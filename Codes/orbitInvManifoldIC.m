@@ -10,9 +10,7 @@ Inputs
 1) G_var - Global Data
 2) LyapOrb - Lyapunov orbit parameters we get from LyapOrbitParameters.m
 3) n - The number of nodes along the lyapunov orbit to plot manifolds
-4) system - defines external or internal system
-5) libNo - Number of liberation point used
-6) orbitNo - number of orbit used from the family
+
 
 Outputs
 --------
@@ -52,6 +50,7 @@ Y0_int = eigVec(:,k);
 
 [~,PHItf,~,~,PHI] = stm_X(globalVar,X0,funVarEq,tf);
 i = 1;
+
 for m = 1:floor(length(PHI(:,1))/(n-1)):length(PHI(:,1))
     phi = reshape(PHI(m,1:36),6,6);
     X0 = reshape(PHI(m,37:42),6,1);

@@ -13,16 +13,33 @@ switch globalVar.userInput.orbit
         orbPar = haloOrbit(globalVar);
 end
 
+manifoldType = globalVar.userInput.manifoldType;
+f1 = globalVar.userInput.manifoldPlot;
+switch manifoldType
+    case 'stable'
+        propogate = 'backward';
+        color = 'g';
+    case 'unstable'
+        propogate = 'forward';
+        color = 'r';
+end
+
 % Initial Condition for invarient Manifolds
-invManifoldIC = orbitInvManifoldIC(globalVar,orbPar,80, 'stable',1);
+invManifoldIC = orbitInvManifoldIC(globalVar,orbPar,40, manifoldType,1);
+invManifoldIC2 = orbitInvManifoldIC(globalVar,orbPar,40, manifoldType,-1);
 
 % Plotting
-figure()
+figure(f1)
 for i = 1:length(invManifoldIC(:,1))
-    [t,x] = integrate(globalVar,globalVar.functions.systemDynamics,invManifoldIC(i,1:6),[0 1.5*orbPar.period],'backward');
-    plot3(x(:,1),x(:,2),x(:,3),'g');hold on; grid on;
+    [t,x] = integrate(globalVar,globalVar.functions.systemDynamics,invManifoldIC(i,1:6),[0 2*orbPar.period],propogate);
+    plot3(x(:,1),x(:,2),x(:,3),color);hold on; grid on;
 end
-scatter3(1-globalVar.userInput.mu,0,0,'p','filled','r');
+for i = 1:length(invManifoldIC2(:,1))
+    [t,x] = integrate(globalVar,globalVar.functions.systemDynamics,invManifoldIC2(i,1:6),[0 2*orbPar.period],propogate);
+    plot3(x(:,1),x(:,2),x(:,3),color);hold on; grid on;
+end
+scatter3(1-globalVar.userInput.mu,0,0,'p','filled','b');
+%scatter3(-globalVar.userInput.mu,0,0,'p','filled','r');
 xlabel('x (ND)')
 ylabel('y (ND)')
 zlabel('z (ND)')
