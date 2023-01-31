@@ -10,7 +10,7 @@ switch globalVar.userInput.orbit
     case 'lyapunov'
         [familyPar]              = lyapunovFamily(globalVar);
     case 'halo'
-        [familyPar]              = haloFamily(globalVar);
+        [familyPar]              = haloFamilyPseudoArcLengthCont(globalVar);%haloFamily(globalVar);
 end
 
 % Plotting the Family

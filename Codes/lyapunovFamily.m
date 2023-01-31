@@ -36,21 +36,22 @@ Reference for continuation
 ...
 %}
 function [familyPar] = lyapunovFamily(globalVar)
-% Extract the parameters
+%% Extract the parameters
 orbitCount = globalVar.userInput.orbitCount;
 mu = globalVar.userInput.mu;
 funVarEq = globalVar.functions.varEq_stmDot;
 tol = globalVar.userInput.tolerance;
 
+%% Obtain Initial Guess
 [guess] = initGuess(globalVar);
+
+%% Differential Correction and Natural Parameter Continuation
 fprintf('\n===============================================\n')
 for i = 1:orbitCount
-    
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
-
     if i > 2
-        delta = (x(i-1,:) - x(i-2,:));
+        delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
         xGuess = x(i-1,:) + delta;
         [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
         while isMaxIterReached
@@ -71,6 +72,7 @@ for i = 1:orbitCount
 end
 fprintf('\n===============================================\n')
 
+%% Output Data
 familyPar.period      = t; %(orbitCount x 1) - Full Orbit Time
 familyPar.IC        = x; %(orbitCount x userInput.Dimension)
 familyPar.jacobianConst    = jacobianConst;

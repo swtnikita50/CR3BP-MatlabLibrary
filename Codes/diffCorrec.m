@@ -39,7 +39,7 @@ function [tCorrec,xCorrec,DF,isMaxIterReached] = diffCorrec(xGuess,globalVar)
 orbit = globalVar.userInput.orbit;
 f1 = globalVar.functions.systemDynamics;
 f2 = globalVar.functions.varEq_stmDot;
-tol = globalVar.userInput.tolerance*10^(-2);
+tol = globalVar.userInput.tolerance^2;
 fig1 = globalVar.userInput.diffCorrecPlot;
 
 % arbitrary time span, should be long enough to reach the y crossing event
