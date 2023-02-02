@@ -29,7 +29,6 @@ for i = 1
 
 end
 
-
 delX0 = [0 0 1 0 0 0];
 S = 0.01*dir;
 for i = 2
@@ -51,15 +50,16 @@ for i = 2
     stabilityIdx(i,1) = calcStabilityIdx(eigens(i));
 end
 
+
 for i = 3:orbitCount
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
-    delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
-    xGuess = x(i-1,:) + delta;
+    dels = 0.01;
+    xGuess = pseudoArcLengthCont(x(i-1,:),dels,globalVar);
     [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
     while isMaxIterReached
-        delta = delta/2;
-        xGuess = x(i-1,:) + delta;
+        dels = dels/2;
+        xGuess = pseudoArcLengthCont(x(i-1,:),dels,globalVar);
         [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
     end
     

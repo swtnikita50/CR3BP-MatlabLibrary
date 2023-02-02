@@ -1,7 +1,7 @@
 % Incomplete
 % Created on: 11-07-22 (13:21)
 
-function [tCorrec,xCorrec,DF,isMaxIterReached] = pseudoArcDiffCorrec(X_Guess,dels,Plot,globalVar)
+function [tCorrec,xCorrec,DF,isMaxIterReached] = pseudoArcDiffCorrec(xGuess,globalVar,dels)
 % Extract from Global Data
 orbit = globalVar.userInput.orbit;
 f1 = globalVar.functions.systemDynamics;

@@ -32,10 +32,10 @@ for i = 1
 
 end
 
-%% Natural Parameter Continuation
+
 delX0 = [0 0 1 0 0 0];
 S = 0.01*dir;
-for i = 2:orbitCount
+for i = 2
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
     delta = delX0*S;        % Continutation Step
@@ -52,8 +52,28 @@ for i = 2:orbitCount
     [eigens(i).val.stable,eigens(i).val.unstable,eigens(i).val.center,eigens(i).val.p,eigens(i).vec.stable,...
         eigens(i).vec.unstable,eigens(i).vec.center,eigens(i).vec.p] = calcEigen(monodromy(:,:,i),1) ;
     stabilityIdx(i,1) = calcStabilityIdx(eigens(i));
-end 
-fprintf('===============================================\n')
+end
+
+for i = 3:orbitCount
+    fprintf('Starting differential correction for orbit no.: %d\n',i)
+    
+    delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
+    xGuess = x(i-1,:) + delta;
+    [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
+    while isMaxIterReached
+        delta = delta/2;
+        xGuess = x(i-1,:) + delta;
+        [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
+    end
+    
+    [t(i,1),x(i,:),~] = diffCorrec(xGuess,globalVar);
+    jacobianConst(i,1) = jacobiValue3D(x(i,:),mu);
+    [~,monodromy(:,:,i),~,~] = stm_X(globalVar,x(i,:),funVarEq,t(i,:));
+    [eigens(i).val.stable,eigens(i).val.unstable,eigens(i).val.center,eigens(i).val.p,eigens(i).vec.stable,...
+        eigens(i).vec.unstable,eigens(i).vec.center,eigens(i).vec.p] = calcEigen(monodromy(:,:,i),1) ;
+    stabilityIdx(i,1) = calcStabilityIdx(eigens(i));
+
+end
 
 %% Output Data
 familyPar.period      = t; %(NoofFam x 1) - Full Orbit Time

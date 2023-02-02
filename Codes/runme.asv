@@ -49,55 +49,34 @@ Library Functions
   29) varEq_stmDot
 
 See Function descriptions for more details
-
-****************************************************************
-                    Read before proceeding
-****************************************************************
-
-NOTE:
------
-1) See the descriptions of each functions inside respective function files(if required).
-6) ENTER ONLY "userInput" asked for . This is fully sufficient.
-7) To know the flow see the file depencies above(if required).
-
-...
 %}
 
 %% --------------------------------- Mainline Program ----------------------------------------------------------------
 clearvars;clc;close all
 
 %% User Input
-userInput.Dimension      = 3;   % 2/3
-userInput.mu        = 0.0121505856; % system Parameter
-userInput.lagrangePt       = 1; % lagrange Point
-userInput.orbitCount  = 10; % No. of Orbits in the family
-userInput.plotDiffCorrec = 1;   % Is Differential Correction Plotted (0/1)
-userInput.orbit          = 'halo';  % which Orbit
-userInput.type           = 'northern';  % 'northern'/'southern' for 'halo' else 'none'
-userInput.tolerance      = 1e-6;    % solution tolerance
-userInput.jacobianConst  = 3.1; % Required jacobian Constant
-
+userInput.Dimension         = 3;   % 2/3
+userInput.mu                = 0.0121505856; % system Parameter
+userInput.lagrangePt        = 1; % lagrange Point
+userInput.orbitCount        = 100; % No. of Orbits in the family
+userInput.plotDiffCorrec    = 1;   % Is Differential Correction Plotted (0/1)
+userInput.orbit             = 'lyapunov';  % which Orbit
+userInput.type              = 'northern';  % 'northern'/'southern' for 'halo' else 'none'
+userInput.tolerance         = 1e-6;    % solution tolerance
+userInput.jacobianConst     = 3.1; % Required jacobian Constant
+userInput.manifoldType      = 'unstable';
+userInput.diffCorrecPlot    = figure('Name','Differential Correction','NumberTitle','off');
+userInput.orbitPlot         = figure('Name','Orbit Plot','NumberTitle','off');
+userInput.manifoldPlot      = figure('Name','Manifold Plot','NumberTitle','off');
 tic
 
-globalVar                  = GlobalData(userInput);
+globalVar                   = getGlobalVariable(userInput);
 fprintf('System /mu value %f\n',globalVar.userInput.mu);
 
 %% Input Orbit Code here
 
-% OrbFamPar = familyPar;
-% 
-% figure()
-% viscircles([0,0],1), grid on; hold on;
-% for i = 1:userInput.NoOfFam
-%     scatter(real(OrbFamPar.Eigens(i).C_Val(1)),imag(OrbFamPar.Eigens(i).C_Val(1)),'ob','filled');
-%     scatter(real(OrbFamPar.Eigens(i).C_Val(2)),imag(OrbFamPar.Eigens(i).C_Val(2)),'ob','filled');
-% end
-% xlabel('Real')
-% ylabel('Imaginary')
-% title('Eigen Structure Associated with Center Subspace');
-% 
-% 
-% plotBifurcationSln(globalVar,OrbFamPar);
-% toc
-% takes 21.493200 seconds for earth moon system(for 30- orbits) with i7 - 4 core and 16g Ram ,without
-% parallel pool.
+familyPar = haloFamilyPseudoArcLengthCont(globalVar);
+
+%plotFamily(globalVar);
+%plotBifurcationSln(globalVar);
+toc

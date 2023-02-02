@@ -75,7 +75,9 @@ fprintf('System /mu value %f\n',globalVar.userInput.mu);
 
 %% Input Orbit Code here
 
-familyPar = haloFamilyPseudoArcLengthCont(globalVar);
+familyPar = haloFamily(globalVar);
+figure()
+plot(familyPar.IC(:,1), familyPar.IC(:,3));
 
 %plotFamily(globalVar);
 %plotBifurcationSln(globalVar);
