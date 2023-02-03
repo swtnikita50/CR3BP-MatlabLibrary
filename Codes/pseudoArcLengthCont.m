@@ -11,6 +11,10 @@ tspan = [0 10];
 
 [tb,xb] = integrate(globalVar,f1,X_prev,tspan,'crossing');
 [~,~,~,~, PHI] = stm_X(globalVar, X_prev,f2,tb(end));
+X_DotDotf = CR3BP([],xb(end,:),globalVar.userInput.mu);
+
+
+T_prev = tb(end);
 
 switch globalVar.userInput.orbit
     case 'lyapunov'
@@ -48,16 +52,15 @@ switch globalVar.userInput.orbit
         end
 end
 
-[tCorrec,xCorrec,~,~] = pseudoArcDiffCorrec(X_new,globalVar,dels, X_prev);
+[tb,xb] = integrate(globalVar,f1,X_new,tspan,'crossing');
+T_new = tb(end);
+[tCorrec,xCorrec,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
 
-
-[~,~,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
 while isMaxIterReached
     dels = dels/2;
     X_new = X_prev + dels*delX_prev;
-    [~,~,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
+    [tCorrec,xCorrec,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
 end
-[tCorrec,xCorrec,~,~] = diffCorrec(X_new,globalVar);
 [~,x] = integrate(globalVar,globalVar.functions.systemDynamics,xCorrec,[0 tCorrec],'forward');
 figure(5)
 plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;

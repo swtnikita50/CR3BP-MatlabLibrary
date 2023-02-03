@@ -1,7 +1,7 @@
 % Incomplete
 % Created on: 11-07-22 (13:21)
 
-function [tCorrec,xCorrec,DF,isMaxIterReached] = pseudoArcDiffCorrec(xGuess,globalVar,dels, X_prev)
+function [tCorrec,xCorrec,DF,isMaxIterReached] = pseudoArcDiffCorrec(xGuess, tGuess,globalVar,dels, X_prev,T_prev)
 % Extract from Global Data
 orbit = globalVar.userInput.orbit;
 f1 = globalVar.functions.systemDynamics;
@@ -22,8 +22,8 @@ end
 
 switch orbit
     case 'lyapunov'
-        xFree = [xGuess(5), xGuess(7)]';
-        xFree_prev = [X_prev(5), X_prev(7)]';
+        xFree = [xGuess(5), tGuess]';
+        xFree_prev = [X_prev(5), T_prev]';
         delX_prev = xFree - xFree_prev;
     case 'halo'
         xFree = [xGuess(1);xGuess(5)];
@@ -97,8 +97,8 @@ while  norm(Fx)>tol
             DFn = DF'/(DF*DF');
             %xFree = xFree - (DGn*Gx)';
             xFree = xFree - DF\Fx;
-            xGuess(1) = xFree(1); % Corrected yDot value
-            xGuess(5) = xFree(2);
+            xGuess(5) = xFree(1); % Corrected yDot value
+            tGuess = xFree(2);
         case 'halo'
             y_Dotf = X_DotDotf(2);
             x_DotDotf = X_DotDotf(4);
