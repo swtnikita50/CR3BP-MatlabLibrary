@@ -3,35 +3,40 @@
 
 function [tCorrec,xCorrec,DF,isMaxIterReached] = pseudoArcDiffCorrec(xGuess, tGuess,globalVar,dels, X_prev,T_prev)
 % Extract from Global Data
-orbit = globalVar.userInput.orbit;
-f1 = globalVar.functions.systemDynamics;
-f2 = globalVar.functions.varEq_stmDot;
-tol = globalVar.userInput.tolerance^2;
-fig1 = globalVar.userInput.diffCorrecPlot;
+orbit   = globalVar.userInput.orbit;
+f1      = globalVar.functions.systemDynamics;
+f2      = globalVar.functions.varEq_stmDot;
+tol 	= globalVar.userInput.tolerance^2;
+fig1    = globalVar.userInput.diffCorrecPlot;
 
 % arbitrary time span, should be long enough to reach the y crossing event
 tspan = [0 10];
 
 isMaxIterReached = 0;
-maxIter = 10;
+maxIter = 20;
 iter = 1; % set the iter value
 
 if xGuess(3) == 0 && strcmp(orbit,'halo')
     orbit = 'lyapunov';
 end
 
-switch orbit
-    case 'lyapunov'
-        xFree = [xGuess(5), tGuess]';
-        xFree_prev = [X_prev(5), T_prev]';
-        delX_prev = xFree - xFree_prev;
-    case 'halo'
-        xFree = [xGuess(1);xGuess(5)];
-end
+
 del_xDotf = 1;
 del_zDotf = 1;
 Fx = [del_xDotf;del_zDotf];
+Gx = 1;
 while  norm(Fx)>tol
+    
+    switch orbit
+        case 'lyapunov'
+            xFree = [xGuess(1), xGuess(5), tGuess]';
+            xFreeG = [xGuess(1), xGuess(5)]';
+            xFree_prev = [X_prev(1), X_prev(5), T_prev]';
+            xFreeG_prev = [X_prev(1), X_prev(5)]';
+            delX_prev = (xFreeG - xFreeG_prev)/dels;
+        case 'halo'
+            xFree = [xGuess(1);xGuess(5)];
+    end
     % Check the max iter and stop
     if iter > maxIter
         fprintf('\nMaximum number of iterations exceded! \n');
@@ -50,7 +55,7 @@ while  norm(Fx)>tol
             del_xDotf =xb(end,4);
             del_yDotf = xb(end,5);
             Fx = [del_yf; del_xDotf];
-            %Gx = [Fx; (xFree - xFree_prev)*delX_prev'-dels];
+            Gx = [Fx; (xFreeG - xFreeG_prev)'*delX_prev-dels];
         case 'halo'
             del_yf = xb(end,2) ;
             del_xDotf =xb(end,4) ;
@@ -91,14 +96,15 @@ while  norm(Fx)>tol
             y_DotDotf = X_DotDotf(5);
             
             %DF = [PHItf(4,1), PHItf(4,5)];
-            DF = [PHItf(2,5), y_Dotf; PHItf(4,5), x_DotDotf];
-            %DG = [DF; delX_prev];
-            %DGn = DG'/(DG*DG');
-            DFn = DF'/(DF*DF');
-            %xFree = xFree - (DGn*Gx)';
-            xFree = xFree - DF\Fx;
-            xGuess(5) = xFree(1); % Corrected yDot value
-            tGuess = xFree(2);
+            DF = [PHItf(2,1), PHItf(2,5), y_Dotf;PHItf(4,1), PHItf(4,5), x_DotDotf];
+            DG = [DF; delX_prev', 0];
+            DGn = DG'/(DG*DG');
+            %DFn = DF'/(DF*DF');
+            xFree = xFree - (DGn*Gx);
+            %xFree = xFree - DF\Fx;
+            xGuess(1) = xFree(1); % Corrected yDot value
+            xGuess(5) = xFree(2);
+            tGuess = xFree(3);
         case 'halo'
             y_Dotf = X_DotDotf(2);
             x_DotDotf = X_DotDotf(4);

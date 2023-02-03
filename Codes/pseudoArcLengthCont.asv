@@ -11,6 +11,8 @@ tspan = [0 10];
 
 [tb,xb] = integrate(globalVar,f1,X_prev,tspan,'crossing');
 [~,~,~,~, PHI] = stm_X(globalVar, X_prev,f2,tb(end));
+X_DotDotf = CR3BP([],xb(end,:),globalVar.userInput.mu);
+
 
 T_prev = tb(end);
 
@@ -27,7 +29,7 @@ switch globalVar.userInput.orbit
             
     case 'halo'
         PHItf = reshape(PHI(end,1:36),6,6);
-        DF = [PHItf(2,:); PHItf(4,:); PHItf(6,:)];
+        DF = [PHItf(4,1) PHItf(4,3), PHItf(4,5); PHItf(6,1), PHItf(6,3), PHItf(6,5)];
         
         var = null(DF);
         switch globalVar.userInput.type
@@ -52,15 +54,20 @@ end
 
 [tb,xb] = integrate(globalVar,f1,X_new,tspan,'crossing');
 T_new = tb(end);
-[tCorrec,xCorrec,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
+% [tCorrec,xCorrec,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
+% 
+% while isMaxIterReached
+%     dels = dels/2;
+%     X_new = X_prev + dels*delX_prev;
+%     [tCorrec,xCorrec,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
+% end
 
-
+[tCorrec,xCorrec,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
 while isMaxIterReached
     dels = dels/2;
     X_new = X_prev + dels*delX_prev;
-    [~,~,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
+    [tCorrec,xCorrec,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
 end
-[tCorrec,xCorrec,~,~] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
 [~,x] = integrate(globalVar,globalVar.functions.systemDynamics,xCorrec,[0 tCorrec],'forward');
 figure(5)
 plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
