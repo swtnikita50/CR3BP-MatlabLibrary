@@ -91,12 +91,12 @@ while  norm(Fx)>tol
             y_DotDotf = X_DotDotf(5);
             
             %DF = [PHItf(4,1), PHItf(4,5)];
-            DF = [PHItf(2,5), y_Dotf; PHItf(4,5), x_DotDotf];
+            DF = [PHItf(2,5), y_DotDotf]
             %DG = [DF; delX_prev];
             %DGn = DG'/(DG*DG');
             DFn = DF'/(DF*DF');
             %xFree = xFree - (DGn*Gx)';
-            xFree = xFree - DF\Fx;
+            xFree = xFree -(DF\Fx)';
             xGuess(1) = xFree(1); % Corrected yDot value
             xGuess(5) = xFree(2);
         case 'halo'

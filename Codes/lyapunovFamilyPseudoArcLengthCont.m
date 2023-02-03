@@ -10,12 +10,13 @@ tol = globalVar.userInput.tolerance;
 [guess] = initGuess(globalVar);
 
 %% Differential Correction and Natural Parameter Continuation
+dels = 0.025;
 fprintf('\n===============================================\n')
 for i = 1:orbitCount
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
     if i > 2
-        dels = 0.01;
+        
         xGuess = pseudoArcLengthCont(x(i-1,:),dels,globalVar);
         [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
         while isMaxIterReached

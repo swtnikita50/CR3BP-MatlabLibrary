@@ -10,21 +10,18 @@ mu = globalVar.userInput.mu;
 tspan = [0 10];
 
 [tb,xb] = integrate(globalVar,f1,X_prev,tspan,'crossing');
-[~,~,~,~, PHI] = stm_X(globalVar,xb(1,:),f2,tb(end));
+[~,~,~,~, PHI] = stm_X(globalVar, X_prev,f2,tb(end));
 
 switch globalVar.userInput.orbit
     case 'lyapunov'
         PHItf = reshape(PHI(end,1:36),6,6);
-        DF = [PHItf(2,:); PHItf(3,:); PHItf(4,:); PHItf(6,:)];
-        
+        DF = [PHItf(4,1), PHItf(4,5)];
         var = null(DF);
-        for i = 1:4
-            if var(i,2) > var(i,1) && (var(i,2) >0 && var(i,1) >0)
-                delX_prev = [ var(i, 1); 0; 0; 0; var(i,2); 0]';
-                X_new = X_prev + dels*delX_prev;
-                break
-            end
+        if var(1,1) > 0
+            var = -var;
         end
+        delX_prev = [var(1, 1); 0; 0; 0; var(2,1); 0]';
+        X_new = X_prev + dels*delX_prev;
             
     case 'halo'
         PHItf = reshape(PHI(end,1:36),6,6);
@@ -50,6 +47,9 @@ switch globalVar.userInput.orbit
                 end
         end
 end
+
+[tCorrec,xCorrec,~,~] = pseudoArcDiffCorrec(X_new,globalVar,dels, X_prev);
+
 
 [~,~,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
 while isMaxIterReached

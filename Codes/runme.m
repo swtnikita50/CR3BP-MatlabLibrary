@@ -58,9 +58,9 @@ clearvars;clc;close all
 userInput.Dimension         = 3;   % 2/3
 userInput.mu                = 0.0121505856; % system Parameter
 userInput.lagrangePt        = 1; % lagrange Point
-userInput.orbitCount        = 150; % No. of Orbits in the family
+userInput.orbitCount        = 40; % No. of Orbits in the family
 userInput.plotDiffCorrec    = 1;   % Is Differential Correction Plotted (0/1)
-userInput.orbit             = 'halo';  % which Orbit
+userInput.orbit             = 'lyapunov';  % which Orbit
 userInput.type              = 'northern';  % 'northern'/'southern' for 'halo' else 'none'
 userInput.tolerance         = 1e-6;    % solution tolerance
 userInput.jacobianConst     = 3.1; % Required jacobian Constant
@@ -75,10 +75,8 @@ fprintf('System /mu value %f\n',globalVar.userInput.mu);
 
 %% Input Orbit Code here
 
-familyPar = haloFamily(globalVar);
-figure()
-plot(familyPar.IC(:,1), familyPar.IC(:,3));
+%familyPar = lyapunovFamilyPseudoArcLengthCont(globalVar);
 
-%plotFamily(globalVar);
+plotFamily(globalVar);
 %plotBifurcationSln(globalVar);
 toc
