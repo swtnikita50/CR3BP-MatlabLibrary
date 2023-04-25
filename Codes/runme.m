@@ -1,7 +1,7 @@
 %{ 
 ...
 Copyright Nikita
-A fully automated CR3BP library
+An attempt to a fully automated CR3BP library
 
 REFERENCES FOR ALGORITHMS(Any one will do as long as you have no doubt)
 --------------------------------------------------------------------------
@@ -57,8 +57,8 @@ clearvars;clc;close all
 %% User Input
 userInput.Dimension         = 3;   % 2/3
 userInput.mu                = 0.0121505856; % system Parameter
-userInput.lagrangePt        = 1; % lagrange Point
-userInput.orbitCount        = 200; % No. of Orbits in the family
+userInput.lagrangePt        = 2; % lagrange Point
+userInput.orbitCount        = 50; % No. of Orbits in the family
 userInput.plotDiffCorrec    = 1;   % Is Differential Correction Plotted (0/1)
 userInput.orbit             = 'halo';  % which Orbit
 userInput.type              = 'northern';  % 'northern'/'southern' for 'halo' else 'none'
@@ -73,10 +73,12 @@ tic
 globalVar                   = getGlobalVariable(userInput);
 fprintf('System /mu value %f\n',globalVar.userInput.mu);
 
-%% Input Orbit Code here
+%% Input Code here
 
-familyPar = haloFamilyPseudoArcLengthCont(globalVar);
+[familyPar] = haloFamily(globalVar);
+%[xLower, xUpper] = bifurcationInterval(familyPar);
 
+[tCorrec,xCorrec,DF,isMaxIterReached] = diffCorrec(y,globalVar);
 %plotFamily(globalVar);
 %plotBifurcationSln(globalVar);
 toc

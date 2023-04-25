@@ -21,7 +21,7 @@ end
 fprintf('\n===============================================\n')
 for i = 1
     %xGuess(i,:) = initGuess(globalVar);
-    xGuess(i,:) = [1.1809, 0, 0, 0, -0.1559,0];
+    xGuess(i,:) = [1.1809, 0, 0]
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
     [t(i,1),x(i,:),~] = diffCorrec(xGuess(i,:),globalVar);
@@ -55,13 +55,10 @@ for i = 2
     stabilityIdx(i,1) = calcStabilityIdx(eigens(i));
 end
 
-delX0 = [1 0 0 0 0 0];
-S = 0.005*dir;
 for i = 3:orbitCount
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
-    %delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
-    delta = delX0*S;
+    delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
     xGuess = x(i-1,:) + delta;
     [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
     while isMaxIterReached

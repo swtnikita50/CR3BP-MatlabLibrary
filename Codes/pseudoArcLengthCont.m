@@ -49,6 +49,7 @@ switch globalVar.userInput.orbit
                 
         end
 end
+end
 
 % [tb,xb] = integrate(globalVar,f1,X_new,tspan,'crossing');
 % T_new = tb(end);
@@ -60,19 +61,18 @@ end
 %     [tCorrec,xCorrec,~,isMaxIterReached] = pseudoArcDiffCorrec(X_new,T_new, globalVar,dels, X_prev,T_prev);
 % end
 
-[tCorrec,xCorrec,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
-while isMaxIterReached
-    dels = dels/2;
-    X_new = X_prev + dels*delX_prev;
-    [tCorrec,xCorrec,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
-end
-[~,x] = integrate(globalVar,globalVar.functions.systemDynamics,xCorrec,[0 tCorrec],'forward');
-figure(5)
-plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
-scatter3(globalVar.lagPts.pos(globalVar.userInput.lagrangePt,1),globalVar.lagPts.pos(globalVar.userInput.lagrangePt,2),0,'p','filled');
+% [tCorrec,xCorrec,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
+% while isMaxIterReached
+%     dels = dels/2;
+%     X_new = X_prev + dels*delX_prev;
+%     [tCorrec,xCorrec,~,isMaxIterReached] = diffCorrec(X_new,globalVar);
+% end
+% [~,x] = integrate(globalVar,globalVar.functions.systemDynamics,xCorrec,[0 tCorrec],'forward');
+% figure(5)
+% plot3(x(:,1),x(:,2),x(:,3));hold on; grid on;
+% scatter3(globalVar.lagPts.pos(globalVar.userInput.lagrangePt,1),globalVar.lagPts.pos(globalVar.userInput.lagrangePt,2),0,'p','filled');
 
 
-X_new = xCorrec;
-end
+%X_new = xCorrec;
 
 

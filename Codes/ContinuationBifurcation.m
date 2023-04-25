@@ -1,15 +1,15 @@
 function [xAns] = ContinuationBifurcation(xLower, xUpper, globalVar)
 
-tol = globalVar.userInput.tolerance*10^2;
+tol = globalVar.userInput.tolerance*10^-1;
 mu = globalVar.userInput.mu;
 funVarEq = globalVar.functions.varEq_stmDot;
 switch globalVar.userInput.orbit
     case 'lyapunov'
         for i = 1:length(xLower.period)
             if xLower.stabilityIdx(i).center < 1
-                bifurcationType = 1;
+                bifurcationType = 1;    %Halo
             else
-                bifurcationType = 2;
+                bifurcationType = 2;    %Axial
             end
             while abs(xUpper.stabilityIdx(i).center-xLower.stabilityIdx(i).center) > tol
                 delta = 1/2*(xUpper.IC(i,:)-xLower.IC(i,:));
@@ -20,23 +20,23 @@ switch globalVar.userInput.orbit
                     xGuess = xLower.IC(i,:) + delta;
                     [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
                 end
-                [tMid(1),xMid(1,:),~,~] = diffCorrec(xGuess,globalVar);
-                [~,monodromy,~,~] = stm_X(globalVar,xMid,funVarEq,tMid);
+                [tMid(i),xMid(i,:),~,~] = diffCorrec(xGuess,globalVar);
+                [~,monodromy,~,~] = stm_X(globalVar,xMid(i,:),funVarEq,tMid(i));
                 [eigens.val.stable,eigens.val.unstable,eigens.val.center,eigens.val.p,eigens.vec.stable,...
             eigens.vec.unstable,eigens.vec.center,eigens.vec.p] = calcEigen(monodromy,1) ;
                 stabilityIdx = calcStabilityIdx(eigens);
                 if stabilityIdx.center < 1 && bifurcationType == 1 || stabilityIdx.center > 1 && bifurcationType == 2
-                    xLower.IC(i,:) = xMid(1,:);
-                    xLower.period(i) = tMid;
-                    xLower.jacobianConst(i) = jacobiValue3D(xMid(1,:),mu);
+                    xLower.IC(i,:) = xMid(i,:);
+                    xLower.period(i) = tMid(i);
+                    xLower.jacobianConst(i) = jacobiValue3D(xMid(i,:),mu);
                     xLower.monodromy(:,:,i) = monodromy;
                     xLower.eigens(i) = eigens;
                     xLower.stabilityIdx(i) = stabilityIdx;
 
                 else
-                    xUpper.IC(i,:) = xMid(1,:);
-                    xUpper.period(i) = tMid;
-                    xUpper.jacobianConst(i) = jacobiValue3D(xMid(1,:),mu);
+                    xUpper.IC(i,:) = xMid(i,:);
+                    xUpper.period(i) = tMid(i);
+                    xUpper.jacobianConst(i) = jacobiValue3D(xMid(i,:),mu);
                     xUpper.monodromy(:,:,i) = monodromy;
                     xUpper.eigens(i) = eigens;
                     xUpper.stabilityIdx(i) = stabilityIdx;

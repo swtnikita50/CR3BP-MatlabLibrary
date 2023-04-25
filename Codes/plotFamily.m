@@ -8,9 +8,9 @@ function plotFamily(globalVar)
 % Extracting Initial Conditions for Plotting the Orbit
 switch globalVar.userInput.orbit
     case 'lyapunov'
-        [familyPar]              = lyapunovFamilyPseudoArcLengthCont(globalVar);
+        [familyPar]              = lyapunovFamily(globalVar);
     case 'halo'
-        [familyPar]              = haloFamilyPseudoArcLengthCont(globalVar);%haloFamily(globalVar);
+        [familyPar]              = haloFamily(globalVar);%haloFamily(globalVar);
 end
 
 % Plotting the Family

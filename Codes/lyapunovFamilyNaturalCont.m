@@ -1,6 +1,5 @@
-
-
-function [familyPar] = lyapunovFamilyPseudoArcLengthCont(globalVar)%% Extract the parameters
+function [familyPar] = lyapunovFamilyNaturalCont(globalVar)
+%% Extract the parameters
 orbitCount = globalVar.userInput.orbitCount;
 mu = globalVar.userInput.mu;
 funVarEq = globalVar.functions.varEq_stmDot;
@@ -8,20 +7,21 @@ tol = globalVar.userInput.tolerance;
 
 %% Obtain Initial Guess
 [guess] = initGuess(globalVar);
+delX0 = [-1 0 0 0 0 0];
+dels = 0.0001;
 
 %% Differential Correction and Natural Parameter Continuation
-dels = 0.01;
 fprintf('\n===============================================\n')
 for i = 1:orbitCount
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
     if i > 2
-        
-        xGuess = pseudoArcLengthCont(x(i-1,:),dels,globalVar);
+        delta = dels*delX0;
+        xGuess = x(i-1,:) + delta;
         [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
         while isMaxIterReached
-            dels = dels/2;
-            xGuess = pseudoArcLengthCont(x(i-1,:),dels,globalVar);
+            delta = 4*delta/5;
+            xGuess = x(i-1,:) + delta;
             [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
         end
     else

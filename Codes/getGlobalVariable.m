@@ -66,7 +66,9 @@ globalVar.userInput             = userInput;
 globalVar.const.gam             = (userInput.mu/3)^(1/3) ;
 globalVar.const.Ax1             = 2e-2*globalVar.const.gam;% initial amplitude 1 for seed orbit
 globalVar.const.Ax2             = 2*globalVar.const.Ax1; % initial amplitude 2 for second seed orbit
-
+if userInput.lagrangePt == 3
+    globalVar.const.Ax2             = 5*globalVar.const.Ax1;
+end
 globalVar.lagPts                    = equilPts(userInput.mu); % see "equil_pts_position.m"
 
 globalVar.const.jacobianMax       = globalVar.lagPts.jacobianConst(userInput.lagrangePt);
