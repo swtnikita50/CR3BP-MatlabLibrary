@@ -72,7 +72,7 @@ switch globalVar.userInput.orbit
                 bifurcationType = 2;
             end
             while abs(xUpper.stabilityIdx(i).center-xLower.stabilityIdx(i).center) > tol
-                delta = 1/2*(xUpper.IC(i,:)-xLower.IC(i,:));
+                delta = delX0*S;
                 xGuess = xLower.IC(i,:) + delta;
                 [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
                 while isMaxIterReached

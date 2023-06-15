@@ -28,7 +28,7 @@ Wp=[];
 V = cleanUpMatrix(V) ;
 D = cleanUpMatrix(D) ;
 delta = min(nonzeros(abs(D-eye(M))'))+1e-6;
-deltaImag = 1.e-4;
+deltaImag = 1.e-3;
 
 
 s=0;u=0;c=0;p=0;

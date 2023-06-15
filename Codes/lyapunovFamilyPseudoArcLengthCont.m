@@ -10,7 +10,7 @@ tol = globalVar.userInput.tolerance;
 [guess] = initGuess(globalVar);
 
 %% Differential Correction and Natural Parameter Continuation
-dels = 0.01;
+dels = 0.025;
 fprintf('\n===============================================\n')
 for i = 1:orbitCount
     fprintf('Starting differential correction for orbit no.: %d\n',i)

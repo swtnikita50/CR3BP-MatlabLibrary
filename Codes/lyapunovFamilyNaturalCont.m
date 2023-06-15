@@ -8,7 +8,7 @@ tol = globalVar.userInput.tolerance;
 %% Obtain Initial Guess
 [guess] = initGuess(globalVar);
 delX0 = [-1 0 0 0 0 0];
-dels = 0.0001;
+dels = 0.01;
 
 %% Differential Correction and Natural Parameter Continuation
 fprintf('\n===============================================\n')

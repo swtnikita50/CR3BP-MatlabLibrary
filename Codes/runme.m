@@ -58,9 +58,9 @@ clearvars;clc;close all
 userInput.Dimension         = 3;   % 2/3
 userInput.mu                = 0.0121505856; % system Parameter
 userInput.lagrangePt        = 2; % lagrange Point
-userInput.orbitCount        = 50; % No. of Orbits in the family
+userInput.orbitCount        = 191; % No. of Orbits in the family
 userInput.plotDiffCorrec    = 1;   % Is Differential Correction Plotted (0/1)
-userInput.orbit             = 'halo';  % which Orbit
+userInput.orbit             = 'axial';  % which Orbit
 userInput.type              = 'northern';  % 'northern'/'southern' for 'halo' else 'none'
 userInput.tolerance         = 1e-6;    % solution tolerance
 userInput.jacobianConst     = 3.1; % Required jacobian Constant
@@ -75,10 +75,26 @@ fprintf('System /mu value %f\n',globalVar.userInput.mu);
 
 %% Input Code here
 
-[familyPar] = haloFamily(globalVar);
-%[xLower, xUpper] = bifurcationInterval(familyPar);
 
-[tCorrec,xCorrec,DF,isMaxIterReached] = diffCorrec(y,globalVar);
+
+[familyPar] = axialFamily(globalVar);
+% newPar.IC           = familyPar.IC(123:end,:);
+% newPar.period       = familyPar.period(123:end);
+% newPar.jacobianConst= familyPar.jacobianConst(123:end);
+% newPar.monodromy    = familyPar.monodromy(:,:,123:end);
+% newPar.eigens       = familyPar.eigens(123:end);
+% newPar.stabilityIdx = familyPar.stabilityIdx(123:end);
+
+%plotBifurcationSln(familyPar, globalVar)
+%[familyPar] = lyapunovFamilyNaturalCont(globalVar);
+
+%[familyPar] = lyapunovFamilyPseudoArcLengthCont(globalVar);
+%[xLower, xUpper] = bifurcation3Interval(familyPar);
+% x = [0.7816, 0, 0, 0, 0.4432, 0];
+% y = x+ [0,0,0,0,0,0.001];
+% %y = [0.7824, 0, 0, 0, 0.4401, 0.05];
+% [~, y_new] = diffCorrec(y,globalVar);
+%[tCorrec,xCorrec,DF,isMaxIterReached] = diffCorrec(y,globalVar);
 %plotFamily(globalVar);
 %plotBifurcationSln(globalVar);
 toc

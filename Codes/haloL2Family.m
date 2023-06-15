@@ -1,7 +1,7 @@
 % Created on 12-07-22 (17:02)
 
 
-function [familyPar] = haloFamily(globalVar)
+function [familyPar] = haloL2Family(globalVar)
 %% Extract the parameters
 orbitCount = globalVar.userInput.orbitCount;
 mu = globalVar.userInput.mu;
@@ -58,11 +58,11 @@ end
 delX0 = [1 0 0 0 0 0];
 S = -0.001*dir;
 delta = delX0*S;
-%globalVar.userInput.orbit = 'halo2';
+globalVar.userInput.orbit = 'halo2';
 for i = 3:orbitCount
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
-    delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
+    %delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
     %delta = delX0*S;
     xGuess = x(i-1,:) + delta;
     [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);

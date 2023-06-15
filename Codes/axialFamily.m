@@ -1,7 +1,4 @@
-% Created on 12-07-22 (17:02)
-
-
-function [familyPar] = haloFamily(globalVar)
+function [familyPar] = axialFamily(globalVar)
 %% Extract the parameters
 orbitCount = globalVar.userInput.orbitCount;
 mu = globalVar.userInput.mu;
@@ -21,7 +18,7 @@ end
 fprintf('\n===============================================\n')
 for i = 1
     %xGuess(i,:) = initGuess(globalVar);
-    xGuess(i,:) = [1.1809, 0, 0, 0, -0.1559,0];
+    xGuess(i,:) = [0.7816, 0, 0, 0, 0.4432, 0];
     fprintf('Starting differential correction for orbit no.: %d\n',i)
     
     [t(i,1),x(i,:),~] = diffCorrec(xGuess(i,:),globalVar);
@@ -34,12 +31,11 @@ for i = 1
 end
 
 
-delX0 = [0 0 1 0 0 0];
-S = 0.01*dir;
+delX0 = [0 0 0 0 0 1];
+S = 0.003*dir;
+delta = delX0*S;        % Continutation Step
 for i = 2
-    fprintf('Starting differential correction for orbit no.: %d\n',i)
-    
-    delta = delX0*S;        % Continutation Step
+    fprintf('Starting differential correction for orbit no.: %d\n',i);
     xGuess = x(i-1,:) + delta;
     [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
     while isMaxIterReached
@@ -55,15 +51,13 @@ for i = 2
     stabilityIdx(i,1) = calcStabilityIdx(eigens(i));
 end
 
-delX0 = [1 0 0 0 0 0];
-S = -0.001*dir;
-delta = delX0*S;
-%globalVar.userInput.orbit = 'halo2';
 for i = 3:orbitCount
-    fprintf('Starting differential correction for orbit no.: %d\n',i)
-    
-    delta = (x(i-1,:) - x(i-2,:));  % Continuation Step
-    %delta = delX0*S;
+
+    if x(i-1,5)<x(1,5)/2
+        globalVar.userInput.orbit = 'axial2';
+    end
+    fprintf('Starting differential correction for orbit no.: %d\n',i);
+    delta = x(i-1,:) -x(i-2,:);
     xGuess = x(i-1,:) + delta;
     [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
     while isMaxIterReached
@@ -71,14 +65,12 @@ for i = 3:orbitCount
         xGuess = x(i-1,:) + delta;
         [~,~,~,isMaxIterReached] = diffCorrec(xGuess,globalVar);
     end
-    
-    [t(i,1),x(i,:),~] = diffCorrec(xGuess,globalVar);
+    [t(i,1),x(i,:),~,~] = diffCorrec(xGuess,globalVar);
     jacobianConst(i,1) = jacobiValue3D(x(i,:),mu);
     [~,monodromy(:,:,i),~,~] = stm_X(globalVar,x(i,:),funVarEq,t(i,:));
     [eigens(i).val.stable,eigens(i).val.unstable,eigens(i).val.center,eigens(i).val.p,eigens(i).vec.stable,...
         eigens(i).vec.unstable,eigens(i).vec.center,eigens(i).vec.p] = calcEigen(monodromy(:,:,i),1) ;
     stabilityIdx(i,1) = calcStabilityIdx(eigens(i));
-
 end
 
 %% Output Data

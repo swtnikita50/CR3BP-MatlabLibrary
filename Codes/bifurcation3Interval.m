@@ -1,31 +1,29 @@
 % Uses: findEigenStructureChange
 %       continuatuion 
 
-function [xLower, xUpper, nBifurcationPts] = bifurcationInterval(familyPar)
+function [xLower, xUpper, nBifurcationPts] = bifurcation3Interval(familyPar)
 
 
 %% Computation
 stabilityIdx = familyPar.stabilityIdx;
-initialIdx = stabilityIdx(1).center;
-if initialIdx > 1
-    isIdxGreaterThan1 = 1;
+initialIdx = stabilityIdx(1).saddle;
+if isempty(initialIdx) 
+    isInitSaddleEmpty = 1;
 else
-    isIdxGreaterThan1 = 0;
+    isInitSaddleEmpty = 0;
 end
 
 nBifurcationPts = 0;
 aftOrbitIdx = [];
 for i = 2:length(stabilityIdx)
-    if ~isempty(stabilityIdx(i).saddle)
-        if stabilityIdx(i).center < 1 && isIdxGreaterThan1
-            nBifurcationPts = nBifurcationPts+1;
-            aftOrbitIdx(end+1) = i;
-            isIdxGreaterThan1 = 0;
-        elseif stabilityIdx(i).center > 1 && ~isIdxGreaterThan1
-            nBifurcationPts = nBifurcationPts+1;
-            aftOrbitIdx(end+1) = i;
-            isIdxGreaterThan1 = 1;
-        end
+    if ~isempty(stabilityIdx(i).saddle) && isInitSaddleEmpty 
+        nBifurcationPts = nBifurcationPts+1;
+        aftOrbitIdx(end+1) = i;
+        isInitSaddleEmpty = 0;
+    elseif isempty(stabilityIdx(i).saddle) && ~isInitSaddleEmpty
+        nBifurcationPts = nBifurcationPts+1;
+        aftOrbitIdx(end+1) = i;
+        isInitSaddleEmpty = 1;
     end
 end
 
@@ -47,5 +45,5 @@ if nBifurcationPts~=0
     end
 else 
     xUpper = NaN;
-    xLower = Nan;
+    xLower = NaN;
 end
